@@ -148,7 +148,7 @@ void StartStatsTimer(void);
 uint32_t GetStatsTimerCount(void);
 
 // enable definitions for profiler
-#define configGENERATE_RUN_TIME_STATS 1 // 1 = enable profiling, 0 = disable profiling
+#define configGENERATE_RUN_TIME_STATS 0 // 1 = enable profiling, 0 = disable profiling
 
 #if (configGENERATE_RUN_TIME_STATS == 1)
 #define configUSE_TRACE_FACILITY  1
