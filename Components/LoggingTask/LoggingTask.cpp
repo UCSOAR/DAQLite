@@ -85,6 +85,7 @@ void LoggingTask::InitTask()
 	DataBroker::Subscribe<IMUData>(this);
 	DataBroker::Subscribe<BaroData>(this);
 	DataBroker::Subscribe<MagData>(this);
+	DataBroker::Subscribe<GPSData>(this);
 
 }
 
@@ -212,6 +213,72 @@ void LoggingTask::HandleCommand(Command& cm){
 		);
 
 		err = log.LogData();
+
+		break;
+	}
+
+	case DataBrokerMessageTypes:: GPS_DATA:
+	{
+		//gets gps data from data broker
+		GPSData data = DataBroker::ExtractData<GPSData>(cm);
+		//get timestamp for the log
+		const uint32_t timestamp = xTaskGetTickCount() * portTICK_PERIOD_MS;
+
+		//manually counts the length of the NMEA sentence
+		uint32_t sentenceLen = 0;
+		while ((sentenceLen < sizeof(data.buffer_)) && (data.buffer_[sentenceLen] != '\0'))
+		{
+			sentenceLen++;
+		}
+
+		//breaks if there is no sentence
+		if (sentenceLen == 0)
+		{
+			break;
+		}
+
+		//storing 12 bytes per 20 byte slot
+		constexpr uint8_t kGpsPayloadBytes = 12;
+		//total chunks/slots required is the ceiling division of sentenceLen and GpsPayload sze in bytes
+		const uint8_t chunkCount = static_cast<uint8_t>((sentenceLen + kGpsPayloadBytes - 1U) / kGpsPayloadBytes); //ceiling division
+
+		//loop through each chunk and copy the appropriate bits into each 20 byte slot
+		//number of slots required for the message is the number chunks
+		for (uint8_t chunkIdx = 0; chunkIdx < chunkCount; chunkIdx++)
+		{
+			//set the buffer to all 0
+			memset(buf, 0, sizeof(buf));
+
+			//calculate sentence offset (byte that needs to be copied into slot)
+			const uint32_t offset = static_cast<uint32_t>(chunkIdx) * kGpsPayloadBytes;
+			//calculate the payLoadLen for this chunk, if the sentenceLen - offset is greater then the 12 byte max of GPS data per slot,
+			//then as usual max out the buffer with 12 bytes, otherwise just fill the buffer with the remainder which could be less than 12 bytes
+			//(this would be a paritally ful slot)
+			const uint8_t payloadLen = static_cast<uint8_t>(((sentenceLen - offset) > kGpsPayloadBytes) ? kGpsPayloadBytes : (sentenceLen - offset));
+
+			//fill the buffer with all the necessary data
+			buf[0] = static_cast<uint8_t>(LoggingData::GPS);
+			memcpy(buf + 1, &timestamp, sizeof(timestamp));
+			buf[5] = chunkIdx;
+			buf[6] = chunkCount;
+			buf[7] = payloadLen;
+			memcpy(buf + 8, data.buffer_ + offset, payloadLen);
+
+			LoggingService log(
+			    LoggingDest::FLASH_EXTERN,
+			    LoggingData::GPS,
+			    buf,
+			    20,
+			    LoggingPriority::SECOND
+			);
+
+			//Log the data to flash
+			err = log.LogData();
+			if (err == LoggingStatus::LOGGING_ERR)
+			{
+				break;
+			}
+		}
 
 		break;
 	}

@@ -27,13 +27,17 @@ class LoggingService{
 		LoggingService(LoggingDest dest, LoggingData dataType, uint8_t* data, uint32_t dataSize, LoggingPriority priority);
 		LoggingStatus LogData();
 		static void ProcessFlashDump();
-
+		static void FlashClear();
 		static void StopDump();
+		static void StopLogging();
+		static void StartLogging();
 	private:
 		LoggingStatus LogToMX66();
 		LoggingStatus LogToInternalMemory();
 		bool BytesEqual(const uint8_t* a, const uint8_t* b, uint32_t n);
 		LoggingStatus MemAppend(const LoggingPacket *data);
+		static void LoadFlashStateFromStorage();
+		static void SaveFlashState();
 
 		LoggingPacket loggingData;
 
@@ -45,8 +49,9 @@ class LoggingService{
 		static uint16_t sectorAddress;
 		static uint8_t bufferPerSector;
 		static uint8_t sectorCount;
-		static uint8_t done;
-		static uint8_t doneDump;
+		static volatile uint8_t done;
+		static volatile uint8_t doneDump;
+		static bool flashStateLoaded;
 
 
 };
