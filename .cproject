@@ -249,6 +249,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry excluding=".metadata|AirbrakesDriver|DMA|FDCanG4|FDCanH7|MAX31856|MAX7456|MX66L1G45GMI|NAU7802|TMUX1104 Driver|W25NDriver" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="PeripheralDriversSubmodule"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Components"/>
 						<entry excluding="Profiler" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="SoarOS"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
@@ -501,6 +502,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry excluding=".metadata|AirbrakesDriver|DMA|FDCanG4|FDCanH7|MAX31856|MAX7456|MX66L1G45GMI|NAU7802|TMUX1104 Driver|W25NDriver" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="PeripheralDriversSubmodule"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Components"/>
 						<entry excluding="Profiler" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="SoarOS"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>

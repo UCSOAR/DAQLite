@@ -34,6 +34,13 @@ class PollingTask: public Task
 		enum PollingTaskCommands : uint16_t {
 			POLL_SENSORS_AND_LOG = 1,
 			GPS_TEST,
+			IMU32_A_TEST,
+			IMU32_B_TEST,
+			IMU16_TEST,
+			BARO07_TEST,
+			BARO11_TEST,
+			MAG_TEST,
+			START_POLLING
 		};
 
 		static PollingTask& Inst() {
@@ -78,7 +85,8 @@ class PollingTask: public Task
 		//sensor data structs
 		BaroData baro07Data;
 		BaroData baro11Data;
-		IMUData imu32Data;
+		IMUData imu32DataA;
+		IMUData imu32DataB;
 		IMUData imu16Data;
 		MagData magData;
 		MagDriverData driverData;
@@ -117,7 +125,8 @@ class PollingTask: public Task
 
 	    //Drivers
 	    LSM6DSO_Driver imu16;
-	    LSM6DO32_Driver imu32;
+	    LSM6DO32_Driver imu32a;
+	    LSM6DO32_Driver imu32b;
 	    MS5607_Driver barometer07{hspi2_, MS5607_CS_PORT, MS5607_CS_PIN};
 	    MS5611_Driver barometer11{hspi4_, MS5611_CS_PORT, MS5611_CS_PIN};
 	    MMC5983MA magnetometer;

@@ -593,6 +593,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* USER CODE BEGIN USART1_MspInit 1 */
+    // Debug UART RX interrupt; priority must be >= configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY (FromISR calls)
+    HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(USART1_IRQn);
 
     /* USER CODE END USART1_MspInit 1 */
 

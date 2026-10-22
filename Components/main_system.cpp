@@ -15,11 +15,12 @@
 #include "DebugTask.hpp"
 #include "LoggingTask.hpp"
 #include "FlashTask.hpp"
+#include "PollingTask.hpp"
 
 
 /* Drivers ------------------------------------------------------------------*/
 namespace Driver {
-    UARTDriver usart8(UART8);
+    UARTDriver usart1(USART1);
     UARTDriver uart7(UART7);
 }
 
@@ -33,6 +34,9 @@ void run_main() {
 	CubeTask::Inst().InitTask();
 	DebugTask::Inst().InitTask();
     LoggingTask::Inst().InitTask();
+    PollingTask::Inst().InitTask();
+    FlashTask::Inst().InitTask();
+
 
 
     // start profiling task if run_time_stats enabled

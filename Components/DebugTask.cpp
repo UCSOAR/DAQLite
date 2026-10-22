@@ -13,6 +13,7 @@
 #include "LoggingService.hpp"
 #include "stm32h7xx_hal.h"
 #include "FlashTask.hpp"
+#include "PollingTask.hpp"
 
 // External Tasks (to send debug commands to)
 
@@ -120,6 +121,38 @@ void DebugTask::HandleDebugMessage(const char *msg)
   else if (strcmp(msg, "stop_dump") == 0)
   {
     LoggingService::StopDump();
+  }
+  else if (strcmp(msg, "imu32a") == 0){
+	  Command cmd(DATA_COMMAND, PollingTask::IMU32_A_TEST);
+	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "imu32b") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::IMU32_B_TEST);
+  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "imu16") == 0){
+    	  Command cmd(DATA_COMMAND, PollingTask::IMU16_TEST);
+    	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "baro07") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::BARO07_TEST);
+  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "baro11") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::BARO11_TEST);
+  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "mag") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::MAG_TEST);
+  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "gps") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::GPS_TEST);
+  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "poll") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::START_POLLING);
+  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
   }
 
 #if (configGENERATE_RUN_TIME_STATS == 1)  // enable profiling commands if profiling enabled

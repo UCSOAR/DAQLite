@@ -12,7 +12,7 @@ extern "C"
 #define FS_PAGE_SIZE 256
 #define FS_SECTOR_SIZE 4096
 #define FS_BLOCK_SIZE 65536
-#define FS_TOTAL_SIZE 0x08000000
+#define FS_TOTAL_SIZE 0x04000000 // MX25L51245G: 512Mb = 64MB
 
     typedef struct
     {

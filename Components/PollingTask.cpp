@@ -14,7 +14,7 @@
 
 
 
-PollingTask::PollingTask():Task(TASK_LOGGING_QUEUE_DEPTH_OBJS), pollTimerHandle(nullptr), imu16(), imu32(), magnetometer()
+PollingTask::PollingTask():Task(TASK_LOGGING_QUEUE_DEPTH_OBJS), pollTimerHandle(nullptr), imu16(), imu32a(), imu32b(), magnetometer()
 {
 
 }
@@ -40,15 +40,15 @@ void PollingTask::InitTask()
 
 
 	imu16.Init(hspi3_, LSM6DSO_CS_PIN,  LSM6DSO_CS_PORT );
-	imu32.Init(hspi4_, LSM6DSO32_CS_PORT, LSM6DSO32_CS_PIN);
+    imu32a.Init(hspi1_, LSM6DSO32_CS_PORT, LSM6DSO32_CS_PIN);
+	imu32b.Init(hspi4_, LSM6DSO32_CS_PORT, LSM6DSO32_CS_PIN);
 	magnetometer.Init(hspi2_, MMC_CS_PORT, MMC_CS_PIN);
 	gpsInitialized = gps.Init(hspi1_, GPS_CS_PORT, GPS_CS_PIN);
 
 	pollTimerHandle = xTimerCreate("PollTimer", pdMS_TO_TICKS(pollPeriodMs), pdTRUE, (void*)this, PollingTask::PollTimerCallback);
 	SOAR_ASSERT(pollTimerHandle != nullptr, "PollingTask::InitTask() - xTimerCreate() failed");
 
-	BaseType_t timerStartRes = xTimerStart(pollTimerHandle, 0);
-	SOAR_ASSERT(timerStartRes == pdPASS, "PollingTask::InitTask() - xTimerStart() failed");
+	// Timer is started later by the START_POLLING command (debug "poll")
 }
 
 
@@ -86,31 +86,129 @@ void PollingTask::HandleRequestCommand(uint16_t taskCommand){
 		PollSensors();
 		LogData();
 		break;
-	case GPS_TEST:
-		if (gpsInitialized)
-		{
-			if (gps.getGGALine(gpsData.buffer_))
-			{
-				SOAR_PRINT("GPS RAW | %s\n", gpsData.buffer_);
-				GPSData rawGps = gpsData;
-				DataBroker::Publish<GPSData>(&rawGps);
-				gps.ParseGpsData(&gpsData);
-				SOAR_PRINT("GPS GGA | time=%d lat_deg=%d lat_min=%d lon_deg=%d lon_min=%d antAlt=%d antUnit=%d geoidAlt=%d geoidUnit=%d totalAlt=%d totalUnit=%d\n",
-						   (int32_t)gpsData.time_,
-						   (int32_t)gpsData.latitude_.degrees_,
-						   (int32_t)gpsData.latitude_.minutes_,
-						   (int32_t)gpsData.longitude_.degrees_,
-						   (int32_t)gpsData.longitude_.minutes_,
-						   (int32_t)gpsData.antennaAltitude_.altitude_,
-						   (int32_t)gpsData.antennaAltitude_.unit_,
-						   (int32_t)gpsData.geoidAltitude_.altitude_,
-						   (int32_t)gpsData.geoidAltitude_.unit_,
-						   (int32_t)gpsData.totalAltitude_.altitude_,
-						   (int32_t)gpsData.totalAltitude_.unit_);
-			}
-
+	case START_POLLING:
+		if (xTimerIsTimerActive(pollTimerHandle) != pdFALSE) {
+			SOAR_PRINT("PollingTask - Already polling\n");
+			break;
 		}
+		pollingTimerStarted = false;
+		if (xTimerStart(pollTimerHandle, 0) == pdPASS) {
+			SOAR_PRINT("PollingTask - Polling started (%d ms period)\n", pollPeriodMs);
+		} else {
+			SOAR_PRINT("PollingTask - Failed to start poll timer\n");
+		}
+		break;
+	case GPS_TEST:
+		if (!gpsInitialized)
+		{
+			SOAR_PRINT("GPS TEST | GPS not initialized\n");
+		}
+		else if (!gps.getGGALine(gpsData.buffer_))
+		{
+			SOAR_PRINT("GPS TEST | Timed out waiting for GGA sentence\n");
+		}
+		else
+		{
+			SOAR_PRINT("GPS RAW | %s\n", gpsData.buffer_);
+			GPSData rawGps = gpsData;
+			DataBroker::Publish<GPSData>(&rawGps);
+			gps.ParseGpsData(&gpsData);
+			SOAR_PRINT("GPS GGA | time=%d lat_deg=%d lat_min=%d lon_deg=%d lon_min=%d antAlt=%d antUnit=%d geoidAlt=%d geoidUnit=%d totalAlt=%d totalUnit=%d\n",
+					   (int32_t)gpsData.time_,
+					   (int32_t)gpsData.latitude_.degrees_,
+					   (int32_t)gpsData.latitude_.minutes_,
+					   (int32_t)gpsData.longitude_.degrees_,
+					   (int32_t)gpsData.longitude_.minutes_,
+					   (int32_t)gpsData.antennaAltitude_.altitude_,
+					   (int32_t)gpsData.antennaAltitude_.unit_,
+					   (int32_t)gpsData.geoidAltitude_.altitude_,
+					   (int32_t)gpsData.geoidAltitude_.unit_,
+					   (int32_t)gpsData.totalAltitude_.altitude_,
+					   (int32_t)gpsData.totalAltitude_.unit_);
+		}
+		break;
+	case IMU32_A_TEST: {
+		uint8_t data[14] = {0};
+		imu32a.ReadSensors(data);
+		imu32DataA = imu32a.ConvertRawMeasurementToStruct(data);
+		imu32DataA.id = 1;
 
+		SOAR_PRINT("IMU32A | id=%u accel=(%d,%d,%d) gyro=(%d,%d,%d) temp=%d\n",
+				   (unsigned int)imu32DataA.id,
+				   (int)imu32DataA.accel.x,
+				   (int)imu32DataA.accel.y,
+				   (int)imu32DataA.accel.z,
+				   (int)imu32DataA.gyro.x,
+				   (int)imu32DataA.gyro.y,
+				   (int)imu32DataA.gyro.z,
+				   (int)imu32DataA.temp);
+		break;
+	}
+	case IMU32_B_TEST: {
+		uint8_t data[14] = {0};
+		imu32b.ReadSensors(data);
+		imu32DataB = imu32b.ConvertRawMeasurementToStruct(data);
+		imu32DataB.id = 1;
+
+		SOAR_PRINT("IMU32B | id=%u accel=(%d,%d,%d) gyro=(%d,%d,%d) temp=%d\n",
+				   (unsigned int)imu32DataB.id,
+				   (int)imu32DataB.accel.x,
+				   (int)imu32DataB.accel.y,
+				   (int)imu32DataB.accel.z,
+				   (int)imu32DataB.gyro.x,
+				   (int)imu32DataB.gyro.y,
+				   (int)imu32DataB.gyro.z,
+				   (int)imu32DataB.temp);
+		break;
+	}
+	case IMU16_TEST: {
+		uint8_t data[14] = {0};
+		imu16.readSensors(data);
+		imu16Data = imu16.bytesToStruct(data, true, true, true);
+		imu16Data.id = 0;
+
+		SOAR_PRINT("IMU16 | id=%u accel=(%d,%d,%d) gyro=(%d,%d,%d) temp=%d\n",
+				   (unsigned int)imu16Data.id,
+				   (int)imu16Data.accel.x,
+				   (int)imu16Data.accel.y,
+				   (int)imu16Data.accel.z,
+				   (int)imu16Data.gyro.x,
+				   (int)imu16Data.gyro.y,
+				   (int)imu16Data.gyro.z,
+				   (int)imu16Data.temp);
+		break;
+	}
+	case BARO07_TEST:
+		baro07Data = barometer07.getSample();
+		baro07Data.id = 0;
+
+		SOAR_PRINT("BARO07 | id=%u pressure=%d temp=%d\n",
+				(unsigned int)baro07Data.id,
+				(int)baro07Data.pressure,
+				(int)baro07Data.temp);
+		break;
+	case BARO11_TEST:
+		baro11Data = barometer11.getSample();
+		baro11Data.id = 0;
+
+		SOAR_PRINT("BARO11 | id=%u pressure=%d temp=%d\n",
+				(unsigned int)baro11Data.id,
+				(int)baro11Data.pressure,
+				(int)baro11Data.temp);
+		break;
+	case MAG_TEST:
+		magnetometer.triggerMeasurement();
+		magnetometer.readData(driverData);
+
+		magData.magX = driverData.scaledX;
+		magData.magY = driverData.scaledY;
+		magData.magZ = driverData.scaledZ;
+
+		SOAR_PRINT("MAG | id%u magX%d magY%d madZ%d\n",
+				(int)magData.magX,
+				(int)magData.magY,
+				(int)magData.magZ
+		);
 	default:
 		break;
 	}
@@ -143,9 +241,13 @@ void PollingTask::PollSensors()
 	imu16Data = imu16.bytesToStruct(data, true, true, true);
 	imu16Data.id = 0;
 
-	imu32.ReadSensors(data);
-	imu32Data = imu32.ConvertRawMeasurementToStruct(data);
-	imu32Data.id = 1;
+	imu32b.ReadSensors(data);
+	imu32DataB = imu32b.ConvertRawMeasurementToStruct(data);
+	imu32DataB.id = 1;
+
+	imu32a.ReadSensors(data);
+	imu32DataA = imu32a.ConvertRawMeasurementToStruct(data);
+	imu32DataA.id = 1;
 
 	magnetometer.triggerMeasurement();
 	magnetometer.readData(driverData);
@@ -191,42 +293,10 @@ void PollingTask::LogData(){
 	previousLogTick = nowTick;
 
 	SOAR_PRINT("Log data polled");
-//	SOAR_PRINT("PollingTask Log | Baro07 id=%u temp=%d pressure=%lu\n",
-//			(unsigned int)baro07Data.id,
-//			(int)baro07Data.temp,
-//			(unsigned long)baro07Data.pressure);
-//	SOAR_PRINT("PollingTask Log | Baro11 id=%u temp=%d pressure=%lu\n",
-//			(unsigned int)baro11Data.id,
-//			(int)baro11Data.temp,
-//			(unsigned long)baro11Data.pressure);
-//
-//	SOAR_PRINT("PollingTask Log | IMU16 id=%u accel=(%d,%d,%d) gyro=(%d,%d,%d) temp=%d\n",
-//			(unsigned int)imu16Data.id,
-//			(int)imu16Data.accel.x,
-//			(int)imu16Data.accel.y,
-//			(int)imu16Data.accel.z,
-//			(int)imu16Data.gyro.x,
-//			(int)imu16Data.gyro.y,
-//			(int)imu16Data.gyro.z,
-//			(int)imu16Data.temp);
-//
-//	SOAR_PRINT("PollingTask Log | IMU32 id=%u accel=(%d,%d,%d) gyro=(%d,%d,%d) temp=%d\n",
-//			(unsigned int)imu32Data.id,
-//			(int)imu32Data.accel.x,
-//			(int)imu32Data.accel.y,
-//			(int)imu32Data.accel.z,
-//			(int)imu32Data.gyro.x,
-//			(int)imu32Data.gyro.y,
-//			(int)imu32Data.gyro.z,
-//			(int)imu32Data.temp);
-//
-//	SOAR_PRINT("PollingTask Log | MAG scaled=(%ld,%ld,%ld)\n",
-//			(long)magData.magX,
-//			(long)magData.magY,
-//			(long)magData.magZ);
 
 	DataBroker::Publish<IMUData>(&imu16Data);
-	DataBroker::Publish<IMUData>(&imu32Data);
+	DataBroker::Publish<IMUData>(&imu32DataB);
+	DataBroker::Publish<IMUData>(&imu32DataA);
 	DataBroker::Publish<BaroData>(&baro07Data);
 	DataBroker::Publish<BaroData>(&baro11Data);
 	DataBroker::Publish<MagData>(&magData);

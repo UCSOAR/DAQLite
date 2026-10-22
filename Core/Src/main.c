@@ -291,11 +291,11 @@ static void MX_QUADSPI_Init(void)
   /* USER CODE END QUADSPI_Init 1 */
   /* QUADSPI parameter configuration*/
   hqspi.Instance = QUADSPI;
-  hqspi.Init.ClockPrescaler = 255;
+  hqspi.Init.ClockPrescaler = 3;
   hqspi.Init.FifoThreshold = 1;
-  hqspi.Init.SampleShifting = QSPI_SAMPLE_SHIFTING_NONE;
-  hqspi.Init.FlashSize = 1;
-  hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_1_CYCLE;
+  hqspi.Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
+  hqspi.Init.FlashSize = 25;
+  hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_2_CYCLE;
   hqspi.Init.ClockMode = QSPI_CLOCK_MODE_0;
   hqspi.Init.FlashID = QSPI_FLASH_ID_1;
   hqspi.Init.DualFlash = QSPI_DUALFLASH_DISABLE;
@@ -685,6 +685,14 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(BARO11_CS_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
+  // Deselect every SPI device at boot (CubeMX defaults the CS pins low)
+  HAL_GPIO_WritePin(GPIOC, MAG_CS_Pin|IMU32_CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(BARO07_CS_GPIO_Port, BARO07_CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPS_CS_GPIO_Port, GPS_CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(IMU16_CS_GPIO_Port, IMU16_CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(BARO11_CS_GPIO_Port, BARO11_CS_Pin, GPIO_PIN_SET);
+  // Release the QSPI flash from hardware reset (RESET# is active low)
+  HAL_GPIO_WritePin(Flash_Reset_GPIO_Port, Flash_Reset_Pin, GPIO_PIN_SET);
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
