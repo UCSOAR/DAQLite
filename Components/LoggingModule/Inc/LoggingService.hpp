@@ -19,7 +19,7 @@
 #define MAX_LOG_SIZE 20 //bytes, minus one byte for priority
 #define RAM_LOG_SIZE 500 //bytes
 #define SECTOR_READ 4000
-#define NUM_SECTORS 4096
+#define NUM_SECTORS 16384 // MX25L51245G: 64MB / 4KB sectors
 #define TOTAL_LOGBUF_SLOTS (NUM_SECTORS * 8)
 
 class LoggingService{
@@ -38,6 +38,8 @@ class LoggingService{
 		LoggingStatus MemAppend(const LoggingPacket *data);
 		static void LoadFlashStateFromStorage();
 		static void SaveFlashState();
+		static void AdvanceSlot();
+		static void SkipUsedSlots();
 
 		LoggingPacket loggingData;
 

@@ -45,10 +45,10 @@ void PollingTask::InitTask()
 	magnetometer.Init(hspi2_, MMC_CS_PORT, MMC_CS_PIN);
 	gpsInitialized = gps.Init(hspi1_, GPS_CS_PORT, GPS_CS_PIN);
 
-	pollTimerHandle = xTimerCreate("PollTimer", pdMS_TO_TICKS(pollPeriodMs), pdTRUE, (void*)this, PollingTask::PollTimerCallback);
+	pollTimerHandle = xTimerCreate("PollTimer", pdMS_TO_TICKS(GROUND_POLL_PERIOD_MS), pdTRUE, (void*)this, PollingTask::PollTimerCallback);
 	SOAR_ASSERT(pollTimerHandle != nullptr, "PollingTask::InitTask() - xTimerCreate() failed");
 
-	// Timer is started later by the START_POLLING command (debug "poll")
+	// Timer is started by FlightTask with SET_GROUND_RATE once the scheduler runs
 }
 
 
@@ -86,17 +86,15 @@ void PollingTask::HandleRequestCommand(uint16_t taskCommand){
 		PollSensors();
 		LogData();
 		break;
-	case START_POLLING:
-		if (xTimerIsTimerActive(pollTimerHandle) != pdFALSE) {
-			SOAR_PRINT("PollingTask - Already polling\n");
-			break;
-		}
-		pollingTimerStarted = false;
-		if (xTimerStart(pollTimerHandle, 0) == pdPASS) {
-			SOAR_PRINT("PollingTask - Polling started (%d ms period)\n", pollPeriodMs);
-		} else {
-			SOAR_PRINT("PollingTask - Failed to start poll timer\n");
-		}
+	case SET_GROUND_RATE:
+		SetPollPeriod(GROUND_POLL_PERIOD_MS);
+		break;
+	case SET_FLIGHT_RATE:
+		SetPollPeriod(FLIGHT_POLL_PERIOD_MS);
+		break;
+	case GPS_INIT:
+		gpsInitialized = gps.Init(hspi1_, GPS_CS_PORT, GPS_CS_PIN);
+		SOAR_PRINT("GPS INIT | %s\n", gpsInitialized ? "VALSET messages sent" : "failed");
 		break;
 	case GPS_TEST:
 		if (!gpsInitialized)
@@ -148,7 +146,7 @@ void PollingTask::HandleRequestCommand(uint16_t taskCommand){
 		uint8_t data[14] = {0};
 		imu32b.ReadSensors(data);
 		imu32DataB = imu32b.ConvertRawMeasurementToStruct(data);
-		imu32DataB.id = 1;
+		imu32DataB.id = 2;
 
 		SOAR_PRINT("IMU32B | id=%u accel=(%d,%d,%d) gyro=(%d,%d,%d) temp=%d\n",
 				   (unsigned int)imu32DataB.id,
@@ -227,8 +225,22 @@ void PollingTask::PollTimerCallback(TimerHandle_t xTimer)
 }
 
 
+/**
+ * @brief Changes the poll timer period, also starts the timer if it is stopped
+ */
+void PollingTask::SetPollPeriod(uint32_t periodMs)
+{
+	if (xTimerChangePeriod(pollTimerHandle, pdMS_TO_TICKS(periodMs), 0) == pdPASS) {
+		SOAR_PRINT("PollingTask - rate set to %u ms\n", (unsigned int)periodMs);
+	} else {
+		SOAR_PRINT("PollingTask - failed to set rate\n");
+	}
+}
+
+
 void PollingTask::PollSensors()
 {
+	const TickType_t startTick = xTaskGetTickCount();
 	uint8_t data[14] = {0};
 
 	baro07Data = barometer07.getSample();
@@ -243,7 +255,7 @@ void PollingTask::PollSensors()
 
 	imu32b.ReadSensors(data);
 	imu32DataB = imu32b.ConvertRawMeasurementToStruct(data);
-	imu32DataB.id = 1;
+	imu32DataB.id = 2;	// unique id so FlightTask only uses imu32a (id 1)
 
 	imu32a.ReadSensors(data);
 	imu32DataA = imu32a.ConvertRawMeasurementToStruct(data);
@@ -262,38 +274,11 @@ void PollingTask::PollSensors()
 	GPSData parsedGps = gpsData;
 	gps.ParseGpsData(&parsedGps);
 
-
+	lastPollDurationMs = (xTaskGetTickCount() - startTick) * portTICK_PERIOD_MS;
 }
 
 
 void PollingTask::LogData(){
-	TickType_t nowTick = xTaskGetTickCount();
-
-	if(!pollingTimerStarted){
-		pollingStartTick = nowTick;
-		previousLogTick = nowTick;
-		pollingTimerStarted = true;
-	}
-
-	TickType_t elapsedTicks = nowTick - pollingStartTick;
-	TickType_t deltaTicks   = nowTick - previousLogTick;
-
-	float elapsedSec = (float)elapsedTicks / configTICK_RATE_HZ;
-	float deltaSec   = (float)deltaTicks / configTICK_RATE_HZ;
-	uint32_t rateHz     = (deltaSec > 0.0f) ? (1.0f / deltaSec) : 0.0f;
-
-	uint32_t elapsedMs = (elapsedTicks * 1000U) / configTICK_RATE_HZ;
-	uint32_t deltaMs   = (deltaTicks * 1000U) / configTICK_RATE_HZ;
-
-	SOAR_PRINT("PollingTask Timing | elapsed=%d ms dt=%d ms rate=%d Hz\n",
-			   elapsedMs,
-			   deltaMs,
-			   rateHz);
-
-	previousLogTick = nowTick;
-
-	SOAR_PRINT("Log data polled");
-
 	DataBroker::Publish<IMUData>(&imu16Data);
 	DataBroker::Publish<IMUData>(&imu32DataB);
 	DataBroker::Publish<IMUData>(&imu32DataA);

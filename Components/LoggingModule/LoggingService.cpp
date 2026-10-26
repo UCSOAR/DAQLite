@@ -7,6 +7,8 @@
 #include "LoggingService.hpp"
 #include "stm32h7xx_hal.h"
 #include "cmsis_os.h"
+#include "FlashTask.hpp"
+#include "Mutex.hpp"
 
 uint8_t  LoggingService::ramLog[RAM_LOG_SIZE] = {0}; 	//buffer that when full logs all to flash (500 bytes)
 uint32_t LoggingService::ramHead = 0;					//the head of the buffer across all instances
@@ -37,22 +39,59 @@ namespace
 		uint32_t checksum;				// simple corruption check
 	};
 
+	/* The state sector is used as an append-only log of records: each save writes the next empty
+	 * 16 byte slot and the newest valid record is the cursor. The sector is only erased once all
+	 * 256 slots are used, so a reset mid-save can at worst lose the newest record, not the cursor.
+	 */
+	constexpr uint32_t STATE_RECORDS_PER_SECTOR = FS_SECTOR_SIZE / sizeof(FlashStateRecord);	//256 records
+	constexpr uint32_t STATE_RECORDS_PER_READ = FS_PAGE_SIZE / sizeof(FlashStateRecord);		//16 records per page read
+	static uint32_t stateSlot = 0;			//next empty record slot in the state sector
+	static bool stateSlotKnown = false;		//stateSlot is only valid once the state sector has been read
+
+	static Mutex flashLock;					//LoggingTask writes while FlashTask can clear, keep them from overlapping
+
 	//computes a checksum which is XOR between the following
 	static uint32_t FlashStateChecksum(const FlashStateRecord &record)
 	{
 		return record.magic ^ record.sector ^ record.bufferPerSector ^ 0xA5A55A5A;
 	}
 
-	//takes a reference to a FlashStateRecotd and fills it with the record from the flash
+	static bool IsValidRecord(const FlashStateRecord &record)
+	{
+		return (record.magic == FLASH_STATE_MAGIC) && (record.checksum == FlashStateChecksum(record));
+	}
+
+	//finds the newest valid record in the state sector, also sets stateSlot to the first empty slot
 	static bool ReadFlashState(FlashStateRecord &record)
 	{
-		//creates raw read buffer and reads into it the data from the FLASH_STATE_SECTOR
-		uint8_t raw[sizeof(FlashStateRecord)] = {0};
-		MX66xxQSPI_ReadSector(raw, FLASH_STATE_SECTOR, 0, sizeof(raw));
-		memcpy(&record, raw, sizeof(record)); 				//parses the data into the record struct
+		FlashStateRecord page[STATE_RECORDS_PER_READ];
+		bool found = false;
 
-		//sends the magic and checksum result to indicate successful state readback
-		return (record.magic == FLASH_STATE_MAGIC) && (record.checksum == FlashStateChecksum(record));
+		stateSlot = STATE_RECORDS_PER_SECTOR;	//full unless an empty slot is found
+		stateSlotKnown = true;
+
+		for (uint32_t base = 0; base < STATE_RECORDS_PER_SECTOR; base += STATE_RECORDS_PER_READ)
+		{
+			MX66xxQSPI_ReadSector(reinterpret_cast<uint8_t*>(page), FLASH_STATE_SECTOR, base * sizeof(FlashStateRecord), sizeof(page));
+
+			for (uint32_t i = 0; i < STATE_RECORDS_PER_READ; ++i)
+			{
+				//records are appended in order, so the first erased slot is the end of the log
+				if (page[i].magic == 0xFFFFFFFFU)
+				{
+					stateSlot = base + i;
+					return found;
+				}
+				//a slot that is written but invalid (reset mid-save) is skipped
+				if (IsValidRecord(page[i]))
+				{
+					record = page[i];
+					found = true;
+				}
+			}
+		}
+
+		return found;
 	}
 
 	//checks if a log chunk is empty (500 bytes) at a specific sector and chunk
@@ -79,31 +118,6 @@ namespace
 
 		return true;
 	}
-
-	//given a start sector and a start chunk this function finds the next available slot to write a buffer of data to
-	static bool FindNextWritableSlot(uint16_t startSector, uint8_t startChunk, uint16_t &sector, uint8_t &chunk)
-	{
-		/*iterates through each chunk in a sector, then repeats for every sector sequentially in
-		 * the falsh chip. The first empty chunk is the next writable slot for the flash chip
-		 * sector and chunk are passed by reference, so they are set to the next writable slot
-		 */
-		for (uint16_t s = startSector; s < FLASH_DATA_LIMIT_SECTOR; ++s)
-		{
-			const uint8_t firstChunk = (s == startSector) ? startChunk : 0U;
-			for (uint8_t c = firstChunk; c < 8U; ++c)
-			{
-				if (IsLogChunkEmpty(s, c))
-				{
-					sector = s;
-					chunk = c;
-					return true;
-				}
-			}
-		}
-
-		//returns false if the flash chip is full up to the data limit sector
-		return false;
-	}
 }
 
 //Constructor for logging service
@@ -118,9 +132,16 @@ LoggingService::LoggingService(LoggingDest dest, LoggingData dataType, uint8_t* 
 
 }
 
-//Saves the flash state to the flash state sector
+//Saves the flash state by appending a record to the flash state sector
 void LoggingService::SaveFlashState()
 {
+	//the next empty record slot is only known after the state sector has been read once
+	if (!stateSlotKnown)
+	{
+		FlashStateRecord unused{};
+		ReadFlashState(unused);
+	}
+
 	//creates a FlashStateRecord with the current flash state/cursor
 	FlashStateRecord record{};
 	record.magic = FLASH_STATE_MAGIC;
@@ -128,17 +149,66 @@ void LoggingService::SaveFlashState()
 	record.bufferPerSector = bufferPerSector;
 	record.checksum = FlashStateChecksum(record);
 
-	//fills the buffer with record bytes
-	uint8_t raw[sizeof(record)] = {0};
-	memcpy(raw, &record, sizeof(record));
+	//all record slots used, start the log over
+	if (stateSlot >= STATE_RECORDS_PER_SECTOR)
+	{
+		MX66xxQSPI_EraseSector(FLASH_STATE_SECTOR);
+		stateSlot = 0;
+	}
 
-	//writes the buffer to the flash state sector (the last sector on the chip always)
-	MX66xxQSPI_EraseSector(FLASH_STATE_SECTOR);
-	MX66xxQSPI_WriteSector(raw, FLASH_STATE_SECTOR, 0, sizeof(raw));	//writes at sector offset 0
+	const uint32_t offset = stateSlot * sizeof(FlashStateRecord);
+	MX66xxQSPI_WriteSector(reinterpret_cast<uint8_t*>(&record), FLASH_STATE_SECTOR, offset, sizeof(record));
+	stateSlot++;
 
-	/*
-	 * NOTE: the flash state sector always contains the last known write cursor
+	//read the record back so a failed save shows up now instead of on the next boot
+	FlashStateRecord check{};
+	MX66xxQSPI_ReadSector(reinterpret_cast<uint8_t*>(&check), FLASH_STATE_SECTOR, offset, sizeof(check));
+	if (!IsValidRecord(check) || check.sector != record.sector || check.bufferPerSector != record.bufferPerSector)
+	{
+		SOAR_PRINT("LoggingService: flash state save FAILED, read back magic=0x%08lX sector=%lu slot=%lu (wrote sector=%lu slot=%lu)\n",
+				   (unsigned long)check.magic,
+				   (unsigned long)check.sector,
+				   (unsigned long)check.bufferPerSector,
+				   (unsigned long)record.sector,
+				   (unsigned long)record.bufferPerSector);
+	}
+}
+
+//moves the write cursor to the next chunk, saving the cursor every time a sector is finished
+void LoggingService::AdvanceSlot()
+{
+	/* Each buffer is 500 bytes, 8 can fit in 4000 bytes, when a sector is full
+	 * (bufferPerSector == 8) go to the next sector
 	 */
+	bufferPerSector++;
+	if (bufferPerSector == 8)
+	{
+		sectorAddress++;
+		bufferPerSector = 0;
+
+		//finish logging if the sectorAddress reaches address that does not exist
+		if (sectorAddress >= FLASH_DATA_LIMIT_SECTOR)
+		{
+			sectorAddress = FLASH_STATE_SECTOR;
+			done = true;
+		}
+		SaveFlashState(); //save flash state after every sector write
+	}
+}
+
+/* The cursor is saved once per finished sector, so after a reset the chunks after the saved
+ * slot in that sector may already be written. Step past them, at most 7 chunk reads and never
+ * outside the current sector (chunk 0 of the next sector is erased before it is written).
+ */
+void LoggingService::SkipUsedSlots()
+{
+	while (!done && (bufferPerSector != 0) && !IsLogChunkEmpty(sectorAddress, bufferPerSector))
+	{
+		SOAR_PRINT("LoggingService: sector=%u slot=%u already written, skipping\n",
+				   (unsigned int)sectorAddress,
+				   (unsigned int)bufferPerSector);
+		AdvanceSlot();
+	}
 }
 
 void LoggingService::LoadFlashStateFromStorage()
@@ -148,92 +218,40 @@ void LoggingService::LoadFlashStateFromStorage()
 	{
 		return;
 	}
+	flashStateLoaded = true;
 
-	//tries to read the flash state if false, the read state was either corrupted, or failed to read
 	FlashStateRecord record{};
-	if (ReadFlashState(record) && record.sector < FLASH_DATA_LIMIT_SECTOR && record.bufferPerSector < 8U)
+	if (ReadFlashState(record))
 	{
-		//sets the saved state sectorAddress and bufferPerSector, this preserves the write cursor in between program runs
-		sectorAddress = static_cast<uint16_t>(record.sector);
-		bufferPerSector = static_cast<uint8_t>(record.bufferPerSector);
-
-		//checks if the log chunk at which the state was saved is empty
-		if (!IsLogChunkEmpty(sectorAddress, bufferPerSector))
+		if (record.sector >= FLASH_DATA_LIMIT_SECTOR)
 		{
-			SOAR_PRINT("LoggingService: saved flash cursor sector=%u slot=%u is occupied, scanning forward\n",
+			//the saved cursor marks the flash as full, stay stopped until a flash clear
+			sectorAddress = FLASH_STATE_SECTOR;
+			bufferPerSector = 0;
+			done = true;
+			SOAR_PRINT("LoggingService: saved flash cursor says flash is full, run flash_clear to log again\n");
+			return;
+		}
+
+		if (record.bufferPerSector < 8U)
+		{
+			//sets the saved state sectorAddress and bufferPerSector, this preserves the write cursor in between program runs
+			sectorAddress = static_cast<uint16_t>(record.sector);
+			bufferPerSector = static_cast<uint8_t>(record.bufferPerSector);
+			done = false;
+			SOAR_PRINT("LoggingService: resuming from saved flash cursor sector=%u slot=%u\n",
 					   (unsigned int)sectorAddress,
 					   (unsigned int)bufferPerSector);
-			/*if the flash chip is full set the cursor to the end of the chip, set done = 1 indidcating
-			 * that the flash chip is full, then as well save the state since the cursor moved from the last
-			 * saved state
-			 */
-			if (!FindNextWritableSlot(sectorAddress, bufferPerSector, sectorAddress, bufferPerSector))
-			{
-				sectorAddress = FLASH_STATE_SECTOR;
-				bufferPerSector = 0;
-				done = 1;
-				flashStateLoaded = true;
-				SaveFlashState();
-				return;
-			}
-			//if flash chip is not full code will make it here and saves the next writable slot to the flash state sector
-			SaveFlashState();
-		}
-		//set done to 0 and cursor is set for logging continuation
-		done = 0;
-		flashStateLoaded = true;
-		return;
-	}
-
-	/*
-	 * code should typically not reach here unless state sector is erased, state record checksum is wrong, magic number is missing,
-	 * saved sector is out of range, or saved chunk is out of range. This manually scans for the first empty chunk
-	 * if the state saved was corrupted in some way
-	 *
-	 */
-
-	//scans each sector and chunk manually to see where the writing stopped and where the write cursor should be set
-	for (uint16_t sector = 0; sector < FLASH_DATA_LIMIT_SECTOR; ++sector) 	//starts at sector 0 -> flash data write limit
-	{
-		for (uint8_t chunk = 0; chunk < 8U; ++chunk)	//iterates through each chunk in the sector
-		{
-			//sets the sectorBuf to all 0xFF and reads from the flash chip
-			memset(sectorBuf, 0xFF, sizeof(sectorBuf));
-			MX66xxQSPI_ReadSector(sectorBuf, sector, static_cast<uint32_t>(chunk) * RAM_LOG_SIZE, RAM_LOG_SIZE);
-
-			//checks each byte in the chunk to see if chunk is empty
-			bool empty = true;
-			for (uint32_t i = 0; i < RAM_LOG_SIZE; ++i)
-			{
-				if (sectorBuf[i] != 0xFF)
-				{
-					//if not empty goes to next chunk
-					empty = false;
-					break;
-				}
-			}
-
-			//if an empty chunk is found set the write cursor and save the flash state
-			if (empty)
-			{
-				sectorAddress = sector;
-				bufferPerSector = chunk;
-				done = 0;
-				flashStateLoaded = true;
-				SaveFlashState();
-				return;
-			}
+			SkipUsedSlots();
+			return;
 		}
 	}
 
-	/*if the flash chip is full set the cursor to the end of the chip, set done = 1 indicating
-	 * that the flash chip is full, then as well save the state since the cursor moved from the last
-	 * saved state
-	 */
-	sectorAddress = FLASH_STATE_SECTOR;
+	//no usable cursor saved (first boot or after the state sector was wiped), start logging from the beginning
+	SOAR_PRINT("LoggingService: no saved flash cursor, starting at sector 0\n");
+	sectorAddress = 0;
 	bufferPerSector = 0;
-	done = 1;
-	flashStateLoaded = true;
+	done = false;
 	SaveFlashState();
 }
 
@@ -271,90 +289,60 @@ LoggingStatus LoggingService::LogData(){
 
 LoggingStatus LoggingService::LogToMX66(){
 
+	//polling starts at boot now, so data can arrive before FlashTask has reset the chip and set QPI / 4-byte mode.
+	//touching the flash before that runs commands in the wrong mode, so drop data until the flash is ready
+	if (!FlashTask::Inst().IsFlashInitialized()){
+		return LoggingStatus::LOG_FLASH_NOT_READY;
+	}
+
 	//load flash state from storage (this will only actually do something the first time this function is run)
 	//we do not want state to be loaded more than once in the lifetime of this code
 	LoadFlashStateFromStorage();
 
 	//appends data to buffer and returns flag determining if buffer is full (full => write data)
 	LoggingStatus status = MemAppend(&loggingData);
+
 	//stops logging, triggered by flash dump, or flashchip is full
-	if(!done){
-		//checks if 500 byte chunck is full (writes when it is full)
-		if(status == LoggingStatus::LOG_FLASH_READY){
-			if(sectorAddress >= FLASH_DATA_LIMIT_SECTOR){
-				done = true;
-				return LoggingStatus::FLASH_FULL;
-			}
+	if(done){
+		return LoggingStatus::FLASH_FULL;
+	}
 
-			if(bufferPerSector == 0){
-				//if a new sector is reached erase before writing
-				MX66xxQSPI_EraseSector(sectorAddress);
-			}
-
-			//checks if log chunk cursor is currently at is full
-			else if (!IsLogChunkEmpty(sectorAddress, bufferPerSector))
-			{
-				SOAR_PRINT("LoggingService: sector=%u slot=%u is occupied, moving to next writable slot\n",
-						   (unsigned int)sectorAddress,
-						   (unsigned int)bufferPerSector);
-
-				//find the next writeable slot, if false then the flash chip is full
-				if (!FindNextWritableSlot(sectorAddress, bufferPerSector, sectorAddress, bufferPerSector))
-				{
-					//set cursor to last sector and set done to true so logging stops, save the state as well
-					sectorAddress = FLASH_STATE_SECTOR;
-					bufferPerSector = 0;
-					done = true;
-					SaveFlashState();
-					return LoggingStatus::FLASH_FULL;
-				}
-
-				//if next writeable slot ends up being chunk 0 erase the sector before writing
-				if(bufferPerSector == 0){
-					MX66xxQSPI_EraseSector(sectorAddress);
-				}
-			}
-
-			//Write data to bufferPerSector * 500 this calculates the offset at which the buffer will be written
-			memcpy(txBuf, ramLog, RAM_LOG_SIZE);
-
-			MX66xxQSPI_WriteSector(txBuf, sectorAddress, (bufferPerSector * 500),  RAM_LOG_SIZE);
-
-			MX66xxQSPI_ReadSector(sectorBuf, sectorAddress,(bufferPerSector * 500),  RAM_LOG_SIZE);
-
-			//check if the bytes written equal the bytes read
-			if(BytesEqual(sectorBuf, txBuf, RAM_LOG_SIZE)){
-
-				/* Each buffer is 500 bytes, 8 can fit in 4000 bytes
-				 * bufferPerSector increases each successful buffer write which
-				 * is used to keep track of when a sector is full, if it is full
-				 * (bufferPerSector == 8) then go to the next sector.
-				 */
-				bufferPerSector++;
-				if(bufferPerSector == 8){
-					sectorAddress++;
-					bufferPerSector = 0;
-					SaveFlashState(); //save flash state after every sector write
-					//finish logging if the sectorAddress reaches address that does not exist
-					if(sectorAddress >= FLASH_DATA_LIMIT_SECTOR){
-						sectorAddress = FLASH_STATE_SECTOR;
-						done = true;
-					}
-				}
-
-				return LoggingStatus::LOGGING_SUCCESS;
-			}
-
-
-			return LoggingStatus::LOGGING_ERR;
-
-		}
+	//checks if 500 byte chunck is full (writes when it is full)
+	if(status != LoggingStatus::LOG_FLASH_READY){
 		return LoggingStatus::LOG_FLASH_NOT_READY;
 	}
-	
-	return LoggingStatus::FLASH_FULL;
 
+	flashLock.Lock();
 
+	//chunk 0 of a sector erases the sector, other chunks should still be empty unless the cursor is behind
+	if(bufferPerSector != 0){
+		SkipUsedSlots();
+	}
+	if(done){
+		flashLock.Unlock();
+		return LoggingStatus::FLASH_FULL;
+	}
+	if(bufferPerSector == 0){
+		//if a new sector is reached erase before writing
+		MX66xxQSPI_EraseSector(sectorAddress);
+	}
+
+	//Write data to bufferPerSector * 500 this calculates the offset at which the buffer will be written
+	memcpy(txBuf, ramLog, RAM_LOG_SIZE);
+
+	MX66xxQSPI_WriteSector(txBuf, sectorAddress, (bufferPerSector * RAM_LOG_SIZE),  RAM_LOG_SIZE);
+
+	MX66xxQSPI_ReadSector(sectorBuf, sectorAddress, (bufferPerSector * RAM_LOG_SIZE),  RAM_LOG_SIZE);
+
+	//check if the bytes written equal the bytes read
+	const bool written = BytesEqual(sectorBuf, txBuf, RAM_LOG_SIZE);
+
+	//move on either way, a chunk that failed read back is left behind instead of being retried
+	AdvanceSlot();
+
+	flashLock.Unlock();
+
+	return written ? LoggingStatus::LOGGING_SUCCESS : LoggingStatus::LOGGING_ERR;
 }
 
 //Sensor type enum to string conversion function (used for flash dump printing)
@@ -562,8 +550,10 @@ void LoggingService::StartLogging(){
 }
 //ensures logging is stopped (this is done to ensure logging stops with appropriate state changes)
 void LoggingService::StopLogging(){
+	flashLock.Lock();
 	done = true;
 	SaveFlashState(); //saves the flash state at which the logging stopped
+	flashLock.Unlock();
 }
 
 
@@ -627,14 +617,15 @@ LoggingStatus LoggingService::MemAppend(const LoggingPacket *data){
 }
 
 void LoggingService::FlashClear(){
-	//Ensures the current flash state is loaded
-	LoadFlashStateFromStorage();
+	flashLock.Lock();
 
-	//clear flash chip bounds
+	//clear flash chip bounds, sector 0 for the new data and the state sector for the cursor log
 	MX66xxQSPI_EraseSector(0);
 	MX66xxQSPI_EraseSector(FLASH_STATE_SECTOR);
+	stateSlot = 0;
+	stateSlotKnown = true;
 
-	//reset flash cursor and all necessary flash state variables
+	//reset flash cursor and all necessary flash state variables, no need to load the old cursor
 	ramHead = 0;
 	sectorAddress = 0;
 	bufferPerSector = 0;
@@ -644,6 +635,7 @@ void LoggingService::FlashClear(){
 
 	//save the flash state
 	SaveFlashState();
-	SOAR_PRINT("Flash clear: logging cursor reset\n");
+	flashLock.Unlock();
 
+	SOAR_PRINT("Flash clear: logging cursor reset\n");
 }
