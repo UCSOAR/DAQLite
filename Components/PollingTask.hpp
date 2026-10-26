@@ -40,8 +40,13 @@ class PollingTask: public Task
 			BARO07_TEST,
 			BARO11_TEST,
 			MAG_TEST,
-			START_POLLING
+			GPS_INIT,
+			SET_GROUND_RATE,	// sent by FlightTask
+			SET_FLIGHT_RATE		// sent by FlightTask
 		};
+
+		static constexpr uint32_t GROUND_POLL_PERIOD_MS = 500;
+		static constexpr uint32_t FLIGHT_POLL_PERIOD_MS = 50;	// tune from GetLastPollDurationMs()
 
 		static PollingTask& Inst() {
 			static PollingTask inst;
@@ -50,8 +55,8 @@ class PollingTask: public Task
 
 		void InitTask();
 
-		// Sets how often (in milliseconds) PollSensors()/LogData() run. Call before InitTask().
-		void SetPollPeriodMs(uint32_t periodMs) { pollPeriodMs = periodMs; }
+		// How long the most recent PollSensors() took, in ms
+		uint32_t GetLastPollDurationMs() const { return lastPollDurationMs; }
 
 	protected:
 
@@ -72,12 +77,9 @@ class PollingTask: public Task
 		void PollSensors();
 
 		TimerHandle_t pollTimerHandle;
-		uint32_t pollPeriodMs = 100;    // How often PollSensors()/LogData() run, set via SetPollPeriodMs()
+		void SetPollPeriod(uint32_t periodMs);
 
-		//to count time elapsed and time taken per poll and Hz
-		TickType_t pollingStartTick = 0;
-		TickType_t previousLogTick = 0;
-		bool pollingTimerStarted = false;
+		volatile uint32_t lastPollDurationMs = 0;
 		bool gpsInitialized = false;
 		bool canNetworkReady = false;
 		TickType_t lastCanJoinRetryTick = 0;

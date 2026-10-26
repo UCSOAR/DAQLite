@@ -20,6 +20,7 @@ enum FLASH_TASK_COMMANDS
     EVENT_FLASH_TEST,
 	FLASH_DUMP,
 	STOP_DUMP,
+	FLASH_CLEAR,
 
 };
 
@@ -39,6 +40,7 @@ public:
     void TriggerTest();
 
     void dumoflash();
+    bool IsFlashInitialized() const { return flashInitialized; }
 
 protected:
     static void RunTask(void *pvParams)
@@ -59,7 +61,7 @@ private:
     void RunFlashTests();
 
     // Member variables
-    bool flashInitialized;
+    volatile bool flashInitialized;
     uint32_t testCounter;
 };
 

@@ -14,6 +14,7 @@
 #include "stm32h7xx_hal.h"
 #include "FlashTask.hpp"
 #include "PollingTask.hpp"
+#include "FlightTask.hpp"
 
 // External Tasks (to send debug commands to)
 
@@ -118,6 +119,11 @@ void DebugTask::HandleDebugMessage(const char *msg)
     Command cmd(TASK_SPECIFIC_COMMAND, FLASH_DUMP);
     FlashTask::Inst().GetEventQueue()->Send(cmd);
   }
+  else if (strcmp(msg, "flash_clear") == 0)
+  {
+    Command cmd(TASK_SPECIFIC_COMMAND, FLASH_CLEAR);
+    FlashTask::Inst().GetEventQueue()->Send(cmd);
+  }
   else if (strcmp(msg, "stop_dump") == 0)
   {
     LoggingService::StopDump();
@@ -150,9 +156,17 @@ void DebugTask::HandleDebugMessage(const char *msg)
   	  Command cmd(DATA_COMMAND, PollingTask::GPS_TEST);
   	  PollingTask::Inst().GetEventQueue()->Send(cmd);
   }
-  else if (strcmp(msg, "poll") == 0){
-  	  Command cmd(DATA_COMMAND, PollingTask::START_POLLING);
+  else if (strcmp(msg, "gps_init") == 0){
+  	  Command cmd(DATA_COMMAND, PollingTask::GPS_INIT);
   	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "flight_state") == 0){
+  	  Command cmd(TASK_SPECIFIC_COMMAND, FlightTask::PRINT_STATE);
+  	  FlightTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "flight_test") == 0){
+  	  Command cmd(TASK_SPECIFIC_COMMAND, FlightTask::TOGGLE_TEST_MODE);
+  	  FlightTask::Inst().GetEventQueue()->Send(cmd);
   }
 
 #if (configGENERATE_RUN_TIME_STATS == 1)  // enable profiling commands if profiling enabled

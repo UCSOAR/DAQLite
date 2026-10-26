@@ -133,6 +133,9 @@ void FlashTask::HandleCommand(Command &cm)
         case FLASH_DUMP:
         	dumoflash();
         	break;
+        case FLASH_CLEAR:
+            LoggingService::FlashClear();
+            break;
 
 
         default:
