@@ -28,6 +28,13 @@ baro07_pressure = []
 baro11_time = []
 baro11_pressure = []
 
+# Altitude prediction filter output (AltitudePredictionFilter/Output/Inc/FilterLog.hpp)
+filter_time = []
+filter_alt = []        # m above pad
+filter_vel = []        # m/s
+filter_apogee = []     # predicted apogee m, 0 = no prediction
+filter_state = []      # 0 PRE_LAUNCH, 1 DETECTION, 2 LAUNCH, 3 LANDED
+
 # ---------- Regex ----------
 imu_pattern = re.compile(
     r"(IMU\d+G)\(ID=\d+\) Timestamp=(\d+).*Accel=\[(-?\d+),(-?\d+),(-?\d+)\].*Gyro=\[(-?\d+),(-?\d+),(-?\d+)\]"
@@ -35,6 +42,11 @@ imu_pattern = re.compile(
 
 baro_pattern = re.compile(
     r"(BARO\d+)\(ID=\d+\) Timestamp=(\d+) Pressure=(-?\d+)"
+)
+
+filter_pattern = re.compile(
+    r"FILTER\s+Timestamp=(\d+)\s+AltCm=(-?\d+)\s+VelDms=(-?\d+)\s+AccCms2=(-?\d+)\s+"
+    r"SdCm=(\d+)\s+ApogeeM=(\d+)\s+EventS=(-?\d+)\s+State=(\d+)\s+Flags=(\d+)"
 )
 
 # ---------- Parse ----------
@@ -83,6 +95,14 @@ for line in lines:
         elif sensor == "BARO11":
             baro11_time.append(ts)
             baro11_pressure.append(pressure)
+
+    filter_match = filter_pattern.search(line)
+    if filter_match:
+        filter_time.append(int(filter_match.group(1)))
+        filter_alt.append(int(filter_match.group(2)) / 100.0)
+        filter_vel.append(int(filter_match.group(3)) / 10.0)
+        filter_apogee.append(int(filter_match.group(6)))
+        filter_state.append(int(filter_match.group(8)))
 
 # ---------- IMU16G Gyro ----------
 plt.figure()
@@ -139,3 +159,21 @@ plt.title("BARO11 Pressure vs Time")
 plt.xlabel("Timestamp")
 plt.ylabel("Pressure")
 plt.show()
+
+# ---------- FILTER ----------
+if filter_time:
+    plt.figure()
+    plt.plot(filter_time, filter_alt, label="Altitude (m)")
+    plt.plot(filter_time, filter_apogee, label="Predicted apogee (m)")
+    plt.title("FILTER Altitude vs Time")
+    plt.xlabel("Timestamp")
+    plt.ylabel("m above pad")
+    plt.legend()
+    plt.show()
+
+    plt.figure()
+    plt.plot(filter_time, filter_vel)
+    plt.title("FILTER Velocity vs Time")
+    plt.xlabel("Timestamp")
+    plt.ylabel("m/s")
+    plt.show()

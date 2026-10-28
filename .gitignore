@@ -1,1 +1,4 @@
 **/Debug/
+AltitudePredictionFilter/Tools/*/build/
+AltitudePredictionFilter/Tools/*/results/
+AltitudePredictionFilter/Tools/**/__pycache__/

@@ -63,8 +63,13 @@ constexpr uint8_t TASK_PROFILER_QUEUE_DEPTH_OBJS = 10;        // Size of the pro
 constexpr uint16_t TASK_PROFILER_STACK_DEPTH_WORDS = 512;        // Size of the profiling task stack
 
 constexpr uint8_t TASK_LOGGING_PRIORITY = 3;
-constexpr uint8_t TASK_LOGGING_QUEUE_DEPTH_OBJS = 10;
+constexpr uint8_t TASK_LOGGING_QUEUE_DEPTH_OBJS = 32;	// Was 10: ~6 messages per poll filled it while logging (re)started
 constexpr uint16_t TASK_LOGGING_QUEUE_DEPTH_WORDS = 512;
+
+//SENSORFRAME TASK
+constexpr uint8_t TASK_SENSORFRAME_PRIORITY = 3;         // Priority of the sensorframe task (APF). Flight critical, must not wait behind logging
+constexpr uint8_t TASK_SENSORFRAME_DEPTH_OBJS = 16;      // Size of the sensorframe task queue
+constexpr uint16_t TASK_SENSORFRAME_DEPTH_WORDS = 1024; // Size of the sensorframe task stack
 
 // FLASH TASK
 constexpr uint8_t TASK_FLASH_TASK_PRIORITY = 3;         // Priority of the flash task

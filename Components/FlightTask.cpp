@@ -122,6 +122,10 @@ void FlightTask::HandleTaskCommand(uint16_t taskCommand){
 
 void FlightTask::OnStateChange(uint32_t nowMs){
 	const bool inFlight = (stateMachine.GetState() == FlightState::FLIGHT);
+	if (inFlight) {
+		hasFlown = true;
+	}
+	flightState = stateMachine.GetState();
 
 	Command rateCmd(DATA_COMMAND, inFlight ? PollingTask::SET_FLIGHT_RATE : PollingTask::SET_GROUND_RATE);
 	PollingTask::Inst().GetEventQueue()->Send(rateCmd);

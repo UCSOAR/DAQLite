@@ -1,0 +1,734 @@
+APF_RawStream
+SensorFrame raw print ON
+SF #1053 t=25129ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(17,-40,1010)mg g=(3,6,0)x0.1dps T=29C | IMU1 a=(-20,6,1022)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89564Pa T=2816(0.01C) | BARO1 p=91153Pa T=3024(0.01C)
+SF #1066 t=25389ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-39,999)mg g=(1,-2,0)x0.1dps T=28C | IMU1 a=(-23,1,1017)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89534Pa T=2823(0.01C) | BARO1 p=91126Pa T=3030(0.01C)
+SF #1079 t=25651ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(17,-39,997)mg g=(0,-2,1)x0.1dps T=28C | IMU1 a=(-26,0,1016)mg g=(-1,2,0)x0.1dps T=27C
+  BARO0 p=89566Pa T=2818(0.01C) | BARO1 p=91173Pa T=3032(0.01C)
+SF #1092 t=25911ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(17,-37,997)mg g=(1,-1,0)x0.1dps T=29C | IMU1 a=(-22,2,1010)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89600Pa T=2820(0.01C) | BARO1 p=91222Pa T=3028(0.01C)
+SF #1105 t=26172ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-40,999)mg g=(1,0,1)x0.1dps T=29C | IMU1 a=(-23,0,1017)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89579Pa T=2814(0.01C) | BARO1 p=91318Pa T=3035(0.01C)
+SF #1118 t=26427ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-40,998)mg g=(2,1,0)x0.1dps T=29C | IMU1 a=(-21,3,1017)mg g=(1,-1,1)x0.1dps T=27C
+  BARO0 p=89558Pa T=2811(0.01C) | BARO1 p=91366Pa T=3033(0.01C)
+SF #1130 t=26680ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-39,999)mg g=(0,0,0)x0.1dps T=29C | IMU1 a=(-22,-2,1022)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89560Pa T=2817(0.01C) | BARO1 p=91377Pa T=3027(0.01C)
+SF #1144 t=26953ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(17,-39,1000)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-25,3,1016)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89569Pa T=2817(0.01C) | BARO1 p=91394Pa T=3032(0.01C)
+SF #1157 t=27208ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-37,999)mg g=(0,-2,0)x0.1dps T=28C | IMU1 a=(-16,0,1015)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89593Pa T=2818(0.01C) | BARO1 p=91331Pa T=3033(0.01C)
+SF #1170 t=27480ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-39,997)mg g=(2,0,1)x0.1dps T=29C | IMU1 a=(-24,1,1012)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89618Pa T=2820(0.01C) | BARO1 p=91215Pa T=3031(0.01C)
+SF #1184 t=27754ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-41,999)mg g=(1,-2,0)x0.1dps T=28C | IMU1 a=(-21,-2,1016)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89603Pa T=2821(0.01C) | BARO1 p=91205Pa T=3032(0.01C)
+SF #1197 t=28009ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-35,998)mg g=(0,-1,1)x0.1dps T=28C | IMU1 a=(-22,3,1023)mg g=(-1,1,0)x0.1dps T=27C
+  BARO0 p=89573Pa T=2816(0.01C) | BARO1 p=91144Pa T=3029(0.01C)
+SF #1210 t=28276ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-39,994)mg g=(1,-2,1)x0.1dps T=29C | IMU1 a=(-21,-4,1015)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89567Pa T=2817(0.01C) | BARO1 p=91163Pa T=3030(0.01C)
+SF #1223 t=28528ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-38,997)mg g=(1,-1,0)x0.1dps T=29C | IMU1 a=(-20,-2,1015)mg g=(0,0,0)x0.1dps T=28C
+  BARO0 p=89603Pa T=2821(0.01C) | BARO1 p=91148Pa T=3027(0.01C)
+SF #1236 t=28789ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-37,997)mg g=(1,1,0)x0.1dps T=28C | IMU1 a=(-23,0,1015)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89579Pa T=2819(0.01C) | BARO1 p=91212Pa T=3033(0.01C)
+SF #1249 t=29051ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-40,999)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-26,-1,1018)mg g=(0,2,0)x0.1dps T=28C
+  BARO0 p=89569Pa T=2815(0.01C) | BARO1 p=91206Pa T=3034(0.01C)
+SF #1262 t=29311ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-39,1001)mg g=(0,-2,0)x0.1dps T=29C | IMU1 a=(-22,2,1019)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89593Pa T=2821(0.01C) | BARO1 p=91245Pa T=3032(0.01C)
+SF #1275 t=29568ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-38,1002)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-23,1,1018)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89587Pa T=2818(0.01C) | BARO1 p=91201Pa T=3028(0.01C)
+SF #1288 t=29829ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-35,993)mg g=(0,-3,1)x0.1dps T=28C | IMU1 a=(-22,4,1014)mg g=(-3,2,0)x0.1dps T=28C
+  BARO0 p=89569Pa T=2815(0.01C) | BARO1 p=91191Pa T=3036(0.01C)
+SF #1300 t=30080ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-37,997)mg g=(1,-2,1)x0.1dps T=29C | IMU1 a=(-20,3,1007)mg g=(-1,1,0)x0.1dps T=27C
+  BARO0 p=89549Pa T=2813(0.01C) | BARO1 p=91259Pa T=3033(0.01C)
+SF #1314 t=30354ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-41,1002)mg g=(0,0,0)x0.1dps T=29C | IMU1 a=(-25,2,1018)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89569Pa T=2817(0.01C) | BARO1 p=91319Pa T=3028(0.01C)
+SF #1327 t=30607ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-40,1000)mg g=(1,1,1)x0.1dps T=29C | IMU1 a=(-23,3,1022)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89574Pa T=2818(0.01C) | BARO1 p=91413Pa T=3035(0.01C)
+Log was unsuccessful
+SF #1340 t=30876ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-41,1000)mg g=(0,0,1)x0.1dps T=29C | IMU1 a=(-22,4,1019)mg g=(-1,0,0)x0.1dps T=28C
+  BARO0 p=89591Pa T=2817(0.01C) | BARO1 p=91430Pa T=3035(0.01C)
+Log was unsuccessful
+Log was unsuccessful
+SF #1353 t=31133ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-38,996)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-24,2,1014)mg g=(-2,1,1)x0.1dps T=28C
+  BARO0 p=89574Pa T=2818(0.01C) | BARO1 p=91416Pa T=3029(0.01C)
+SF #1366 t=31388ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-39,999)mg g=(0,-1,0)x0.1dps T=29C | IMU1 a=(-24,1,1012)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89584Pa T=2819(0.01C) | BARO1 p=91463Pa T=3031(0.01C)
+SF #1379 t=31653ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(17,-37,998)mg g=(1,0,1)x0.1dps T=29C | IMU1 a=(-26,2,1013)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89573Pa T=2817(0.01C) | BARO1 p=91480Pa T=3032(0.01C)
+SF #1392 t=31909ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-41,1002)mg g=(1,1,1)x0.1dps T=29C | IMU1 a=(-21,1,1021)mg g=(1,0,0)x0.1dps T=27C
+  BARO0 p=89590Pa T=2822(0.01C) | BARO1 p=91602Pa T=3036(0.01C)
+SF #1405 t=32174ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-40,1001)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-20,-1,1018)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89541Pa T=2819(0.01C) | BARO1 p=91550Pa T=3036(0.01C)
+SF #1418 t=32430ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-40,1003)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-21,-2,1018)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89557Pa T=2813(0.01C) | BARO1 p=91553Pa T=3042(0.01C)
+SF #1431 t=32690ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-39,999)mg g=(1,-2,0)x0.1dps T=29C | IMU1 a=(-24,6,1016)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89587Pa T=2819(0.01C) | BARO1 p=91521Pa T=3037(0.01C)
+SF #1444 t=32952ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(12,-39,995)mg g=(1,0,1)x0.1dps T=29C | IMU1 a=(-24,1,1011)mg g=(0,1,0)x0.1dps T=27C
+  BARO0 p=89581Pa T=2820(0.01C) | BARO1 p=91447Pa T=3037(0.01C)
+SF #1457 t=33213ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-38,999)mg g=(1,0,1)x0.1dps T=29C | IMU1 a=(-26,2,1018)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89587Pa T=2814(0.01C) | BARO1 p=91322Pa T=3036(0.01C)
+SF #1470 t=33478ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(11,-41,1001)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-24,3,1022)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89553Pa T=2816(0.01C) | BARO1 p=91345Pa T=3032(0.01C)
+SF #1483 t=33733ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-38,998)mg g=(0,-2,0)x0.1dps T=29C | IMU1 a=(-24,3,1018)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89568Pa T=2815(0.01C) | BARO1 p=91319Pa T=3038(0.01C)
+SF #1496 t=33993ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-37,1000)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-20,-1,1018)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89591Pa T=2819(0.01C) | BARO1 p=91256Pa T=3035(0.01C)
+SF #1509 t=34253ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-38,996)mg g=(0,-2,1)x0.1dps T=28C | IMU1 a=(-20,-3,1016)mg g=(-1,1,1)x0.1dps T=28C
+  BARO0 p=89612Pa T=2815(0.01C) | BARO1 p=91280Pa T=3037(0.01C)
+SF #1522 t=34512ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-38,996)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-24,6,1008)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89572Pa T=2818(0.01C) | BARO1 p=91314Pa T=3040(0.01C)
+SF #1535 t=34767ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-38,994)mg g=(0,-1,1)x0.1dps T=28C | IMU1 a=(-22,-1,1013)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89604Pa T=2820(0.01C) | BARO1 p=91252Pa T=3041(0.01C)
+SF #1548 t=35029ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-39,1004)mg g=(2,3,0)x0.1dps T=29C | IMU1 a=(-20,-1,1024)mg g=(3,-1,0)x0.1dps T=28C
+  BARO0 p=89542Pa T=2814(0.01C) | BARO1 p=91218Pa T=3042(0.01C)
+SF #1560 t=35279ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-38,1002)mg g=(2,1,0)x0.1dps T=29C | IMU1 a=(-22,-3,1021)mg g=(2,0,0)x0.1dps T=28C
+  BARO0 p=89567Pa T=2813(0.01C) | BARO1 p=91127Pa T=3043(0.01C)
+SF #1574 t=35550ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-37,1001)mg g=(0,-1,0)x0.1dps T=29C | IMU1 a=(-21,4,1018)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89573Pa T=2819(0.01C) | BARO1 p=91118Pa T=3036(0.01C)
+SF #1587 t=35812ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-37,999)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-24,3,1019)mg g=(-1,0,0)x0.1dps T=28C
+  BARO0 p=89571Pa T=2816(0.01C) | BARO1 p=91170Pa T=3038(0.01C)
+SF #1600 t=36078ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(12,-43,1001)mg g=(3,2,-4)x0.1dps T=29C | IMU1 a=(-26,0,1015)mg g=(2,-1,-6)x0.1dps T=28C
+  BARO0 p=89546Pa T=2822(0.01C) | BARO1 p=91220Pa T=3037(0.01C)
+SF #1613 t=36329ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(13,-38,993)mg g=(8,6,0)x0.1dps T=29C | IMU1 a=(-22,2,1018)mg g=(5,-6,-2)x0.1dps T=28C
+  BARO0 p=89552Pa T=2824(0.01C) | BARO1 p=91277Pa T=3039(0.01C)
+SF #1626 t=36588ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-35,996)mg g=(-9,-7,-12)x0.1dps T=29C | IMU1 a=(-20,1,1017)mg g=(-5,9,-12)x0.1dps T=28C
+  BARO0 p=89568Pa T=2822(0.01C) | BARO1 p=91276Pa T=3043(0.01C)
+SF #1639 t=36851ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(12,-35,1010)mg g=(1,-1,1)x0.1dps T=29C | IMU1 a=(-20,3,1020)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89612Pa T=2818(0.01C) | BARO1 p=91199Pa T=3035(0.01C)
+SF #1652 t=37113ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(12,-36,1007)mg g=(-4,-5,1)x0.1dps T=29C | IMU1 a=(-20,2,1015)mg g=(-4,6,0)x0.1dps T=28C
+  BARO0 p=89537Pa T=2822(0.01C) | BARO1 p=91198Pa T=3034(0.01C)
+SF #1665 t=37371ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(19,-43,947)mg g=(-9,-9,1)x0.1dps T=29C | IMU1 a=(-27,2,1007)mg g=(-2,4,0)x0.1dps T=28C
+  BARO0 p=89572Pa T=2824(0.01C) | BARO1 p=91255Pa T=3041(0.01C)
+SF #1678 t=37633ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(11,-39,1008)mg g=(19,14,1)x0.1dps T=29C | IMU1 a=(-22,6,1016)mg g=(15,-18,0)x0.1dps T=28C
+  BARO0 p=89589Pa T=2821(0.01C) | BARO1 p=91287Pa T=3042(0.01C)
+SF #1691 t=37892ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-40,1003)mg g=(7,3,1)x0.1dps T=29C | IMU1 a=(-23,0,1019)mg g=(4,-3,0)x0.1dps T=28C
+  BARO0 p=89570Pa T=2820(0.01C) | BARO1 p=91298Pa T=3035(0.01C)
+SF #1704 t=38150ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-39,1002)mg g=(4,2,1)x0.1dps T=29C | IMU1 a=(-21,2,1018)mg g=(2,-2,0)x0.1dps T=29C
+  BARO0 p=89578Pa T=2824(0.01C) | BARO1 p=91304Pa T=3038(0.01C)
+SF #1717 t=38410ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-39,1007)mg g=(2,0,1)x0.1dps T=29C | IMU1 a=(-20,5,1020)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89576Pa T=2821(0.01C) | BARO1 p=91397Pa T=3037(0.01C)
+SF #1730 t=38676ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(12,-42,990)mg g=(-3,-4,1)x0.1dps T=29C | IMU1 a=(-18,3,1010)mg g=(-3,4,1)x0.1dps T=28C
+  BARO0 p=89551Pa T=2825(0.01C) | BARO1 p=91454Pa T=3043(0.01C)
+SF #1743 t=38926ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(17,-41,998)mg g=(2,0,0)x0.1dps T=29C | IMU1 a=(-19,3,1012)mg g=(1,-1,0)x0.1dps T=28C
+  BARO0 p=89513Pa T=2825(0.01C) | BARO1 p=91510Pa T=3040(0.01C)
+SF #1756 t=39193ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-37,997)mg g=(-1,-2,1)x0.1dps T=29C | IMU1 a=(-25,1,1015)mg g=(1,-1,0)x0.1dps T=28C
+  BARO0 p=89598Pa T=2823(0.01C) | BARO1 p=91418Pa T=3038(0.01C)
+SF #1769 t=39451ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(16,-41,1000)mg g=(2,0,1)x0.1dps T=29C | IMU1 a=(-26,5,1019)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89587Pa T=2826(0.01C) | BARO1 p=91388Pa T=3046(0.01C)
+SF #1782 t=39709ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-42,1003)mg g=(1,1,0)x0.1dps T=29C | IMU1 a=(-27,-1,1024)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89570Pa T=2821(0.01C) | BARO1 p=91332Pa T=3039(0.01C)
+SF #1795 t=39967ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-39,999)mg g=(1,0,1)x0.1dps T=29C | IMU1 a=(-21,-2,1017)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89564Pa T=2822(0.01C) | BARO1 p=91371Pa T=3040(0.01C)
+SF #1808 t=40232ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(15,-40,999)mg g=(1,-1,1)x0.1dps T=28C | IMU1 a=(-26,3,1014)mg g=(0,0,0)x0.1dps T=28C
+  BARO0 p=89563Pa T=2827(0.01C) | BARO1 p=91420Pa T=3038(0.01C)
+SF #1821 t=40493ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(11,-38,992)mg g=(0,-2,0)x0.1dps T=29C | IMU1 a=(-25,2,1015)mg g=(0,2,0)x0.1dps T=28C
+  BARO0 p=89590Pa T=2820(0.01C) | BARO1 p=91384Pa T=3049(0.01C)
+SF #1834 t=40754ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-39,1001)mg g=(3,1,1)x0.1dps T=29C | IMU1 a=(-22,3,1019)mg g=(2,-1,0)x0.1dps T=28C
+  BARO0 p=89593Pa T=2828(0.01C) | BARO1 p=91398Pa T=3042(0.01C)
+SF #1847 t=41007ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(11,-41,976)mg g=(94,72,2)x0.1dps T=29C | IMU1 a=(-24,5,1016)mg g=(78,-100,-1)x0.1dps T=28C
+  BARO0 p=89589Pa T=2829(0.01C) | BARO1 p=91398Pa T=3040(0.01C)
+SF #1860 t=41280ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(14,-36,997)mg g=(1,0,0)x0.1dps T=29C | IMU1 a=(-24,2,1013)mg g=(2,-2,0)x0.1dps T=28C
+  BARO0 p=89611Pa T=2831(0.01C) | BARO1 p=91293Pa T=3039(0.01C)
+SF #1874 t=41550ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-25,-58,980)mg g=(35,53,-348)x0.1dps T=29C | IMU1 a=(-44,24,997)mg g=(48,-31,-350)x0.1dps T=28C
+  BARO0 p=89560Pa T=2823(0.01C) | BARO1 p=91288Pa T=3037(0.01C)
+SF #1887 t=41807ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-58,3,992)mg g=(118,-6,-434)x0.1dps T=29C | IMU1 a=(18,63,981)mg g=(-11,-114,-435)x0.1dps T=27C
+  BARO0 p=89582Pa T=2825(0.01C) | BARO1 p=91337Pa T=3038(0.01C)
+SF #1900 t=42076ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-55,42,1009)mg g=(-350,58,-95)x0.1dps T=29C | IMU1 a=(90,35,1076)mg g=(59,384,-96)x0.1dps T=28C
+  BARO0 p=89550Pa T=2826(0.01C) | BARO1 p=91379Pa T=3039(0.01C)
+SF #1913 t=42326ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-36,21,1094)mg g=(59,49,924)x0.1dps T=29C | IMU1 a=(17,-5,1021)mg g=(103,-95,956)x0.1dps T=28C
+  BARO0 p=89580Pa T=2827(0.01C) | BARO1 p=91340Pa T=3039(0.01C)
+SF #1926 t=42594ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-44,-20,971)mg g=(-62,-77,275)x0.1dps T=28C | IMU1 a=(-18,22,1010)mg g=(-99,87,283)x0.1dps T=28C
+  BARO0 p=89583Pa T=2828(0.01C) | BARO1 p=91327Pa T=3046(0.01C)
+SF #1939 t=42847ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-36,955)mg g=(-12,-16,41)x0.1dps T=29C | IMU1 a=(-20,9,1005)mg g=(-25,25,42)x0.1dps T=27C
+  BARO0 p=89583Pa T=2827(0.01C) | BARO1 p=91292Pa T=3038(0.01C)
+SF #1952 t=43114ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-67,51,988)mg g=(28,19,157)x0.1dps T=29C | IMU1 a=(69,55,1027)mg g=(22,-29,154)x0.1dps T=28C
+  BARO0 p=89563Pa T=2823(0.01C) | BARO1 p=91315Pa T=3042(0.01C)
+SF #1965 t=43367ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-5,-53,1006)mg g=(7,20,-325)x0.1dps T=29C | IMU1 a=(-46,-15,1036)mg g=(16,-3,-326)x0.1dps T=28C
+  BARO0 p=89585Pa T=2822(0.01C) | BARO1 p=91320Pa T=3042(0.01C)
+SF #1978 t=43630ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,73,968)mg g=(35,64,170)x0.1dps T=29C | IMU1 a=(82,77,935)mg g=(44,-72,103)x0.1dps T=28C
+  BARO0 p=89545Pa T=2826(0.01C) | BARO1 p=91309Pa T=3045(0.01C)
+SF #1990 t=43884ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-9,4,996)mg g=(5,1,91)x0.1dps T=29C | IMU1 a=(19,6,1016)mg g=(3,-3,89)x0.1dps T=27C
+  BARO0 p=89585Pa T=2830(0.01C) | BARO1 p=91302Pa T=3034(0.01C)
+SF #2003 t=44134ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,-30,998)mg g=(5,3,7)x0.1dps T=28C | IMU1 a=(-12,10,1020)mg g=(6,-6,6)x0.1dps T=28C
+  BARO0 p=89571Pa T=2823(0.01C) | BARO1 p=91310Pa T=3037(0.01C)
+SF #2016 t=44391ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-1,-30,1005)mg g=(0,-2,23)x0.1dps T=29C | IMU1 a=(-17,20,1020)mg g=(-1,1,21)x0.1dps T=28C
+  BARO0 p=89570Pa T=2829(0.01C) | BARO1 p=91353Pa T=3041(0.01C)
+SF #2029 t=44653ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-30,999)mg g=(-2,-4,2)x0.1dps T=29C | IMU1 a=(-15,13,1019)mg g=(-2,3,1)x0.1dps T=28C
+  BARO0 p=89564Pa T=2831(0.01C) | BARO1 p=91338Pa T=3038(0.01C)
+SF #2042 t=44913ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-26,997)mg g=(-1,-2,1)x0.1dps T=29C | IMU1 a=(-12,7,1014)mg g=(-2,2,0)x0.1dps T=28C
+  BARO0 p=89658Pa T=2835(0.01C) | BARO1 p=91320Pa T=3040(0.01C)
+SF #2055 t=45172ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-30,998)mg g=(2,1,1)x0.1dps T=29C | IMU1 a=(-13,13,1015)mg g=(1,-1,1)x0.1dps T=28C
+  BARO0 p=89593Pa T=2830(0.01C) | BARO1 p=91240Pa T=3041(0.01C)
+SF #2068 t=45430ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-30,1001)mg g=(1,1,3)x0.1dps T=29C | IMU1 a=(-11,11,1018)mg g=(1,0,3)x0.1dps T=28C
+  BARO0 p=89584Pa T=2827(0.01C) | BARO1 p=91186Pa T=3045(0.01C)
+SF #2081 t=45691ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-31,1005)mg g=(3,2,2)x0.1dps T=28C | IMU1 a=(-17,12,1020)mg g=(2,-2,0)x0.1dps T=28C
+  BARO0 p=89595Pa T=2834(0.01C) | BARO1 p=91102Pa T=3031(0.01C)
+SF #2094 t=45947ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(9,-29,1010)mg g=(-5,-6,10)x0.1dps T=29C | IMU1 a=(-16,10,1023)mg g=(1,0,10)x0.1dps T=28C
+  BARO0 p=89534Pa T=2825(0.01C) | BARO1 p=91127Pa T=3037(0.01C)
+SF #2107 t=46213ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-30,1003)mg g=(0,-3,2)x0.1dps T=29C | IMU1 a=(-21,9,1016)mg g=(-2,4,1)x0.1dps T=28C
+  BARO0 p=89561Pa T=2822(0.01C) | BARO1 p=91143Pa T=3037(0.01C)
+SF #2120 t=46476ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-33,995)mg g=(-1,-4,3)x0.1dps T=29C | IMU1 a=(-13,12,1015)mg g=(-2,3,2)x0.1dps T=28C
+  BARO0 p=89565Pa T=2825(0.01C) | BARO1 p=91176Pa T=3039(0.01C)
+SF #2133 t=46735ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-34,996)mg g=(2,0,2)x0.1dps T=29C | IMU1 a=(-19,8,1015)mg g=(1,-1,1)x0.1dps T=28C
+  BARO0 p=89566Pa T=2832(0.01C) | BARO1 p=91205Pa T=3040(0.01C)
+SF #2146 t=46988ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,-34,998)mg g=(5,3,2)x0.1dps T=28C | IMU1 a=(-15,10,1018)mg g=(3,-3,0)x0.1dps T=28C
+  BARO0 p=89569Pa T=2824(0.01C) | BARO1 p=91212Pa T=3031(0.01C)
+SF #2159 t=47253ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,-33,1005)mg g=(3,2,1)x0.1dps T=29C | IMU1 a=(-18,11,1021)mg g=(3,-1,0)x0.1dps T=28C
+  BARO0 p=89577Pa T=2830(0.01C) | BARO1 p=91199Pa T=3040(0.01C)
+SF #2172 t=47513ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(8,-28,1000)mg g=(-1,-4,1)x0.1dps T=29C | IMU1 a=(-18,10,1020)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89602Pa T=2829(0.01C) | BARO1 p=91239Pa T=3033(0.01C)
+SF #2185 t=47770ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(6,-32,999)mg g=(-2,-4,1)x0.1dps T=29C | IMU1 a=(-17,11,1015)mg g=(-2,4,1)x0.1dps T=28C
+  BARO0 p=89523Pa T=2831(0.01C) | BARO1 p=91250Pa T=3035(0.01C)
+SF #2198 t=48029ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,-32,993)mg g=(-2,-4,1)x0.1dps T=29C | IMU1 a=(-17,9,1017)mg g=(-3,4,0)x0.1dps T=28C
+  BARO0 p=89603Pa T=2833(0.01C) | BARO1 p=91291Pa T=3044(0.01C)
+SF #2211 t=48294ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(6,-31,998)mg g=(3,1,1)x0.1dps T=29C | IMU1 a=(-18,3,1014)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89617Pa T=2828(0.01C) | BARO1 p=91284Pa T=3037(0.01C)
+SF #2224 t=48550ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-32,999)mg g=(3,3,1)x0.1dps T=29C | IMU1 a=(-14,17,1024)mg g=(4,-3,0)x0.1dps T=27C
+  BARO0 p=89545Pa T=2831(0.01C) | BARO1 p=91293Pa T=3039(0.01C)
+SF #2237 t=48809ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-33,1004)mg g=(4,3,1)x0.1dps T=28C | IMU1 a=(-18,10,1016)mg g=(3,-3,-1)x0.1dps T=28C
+  BARO0 p=89556Pa T=2830(0.01C) | BARO1 p=91336Pa T=3046(0.01C)
+SF #2250 t=49078ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(10,-34,989)mg g=(-11,-13,-2)x0.1dps T=29C | IMU1 a=(-24,3,1016)mg g=(-17,18,-1)x0.1dps T=28C
+  BARO0 p=89608Pa T=2835(0.01C) | BARO1 p=91195Pa T=3038(0.01C)
+SF #2263 t=49332ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(8,-36,996)mg g=(0,-1,0)x0.1dps T=29C | IMU1 a=(-20,7,1016)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89596Pa T=2832(0.01C) | BARO1 p=91191Pa T=3042(0.01C)
+SF #2276 t=49587ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-33,996)mg g=(-3,-5,2)x0.1dps T=29C | IMU1 a=(-20,10,1016)mg g=(-1,2,1)x0.1dps T=28C
+  BARO0 p=89581Pa T=2832(0.01C) | BARO1 p=91208Pa T=3039(0.01C)
+SF #2289 t=49847ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(29,-25,998)mg g=(10,6,32)x0.1dps T=29C | IMU1 a=(-13,-1,1013)mg g=(4,-7,35)x0.1dps T=28C
+  BARO0 p=89597Pa T=2835(0.01C) | BARO1 p=91189Pa T=3043(0.01C)
+SF #2302 t=50110ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-11,-45,985)mg g=(-32,-130,52)x0.1dps T=29C | IMU1 a=(-39,2,1004)mg g=(-130,34,60)x0.1dps T=28C
+  BARO0 p=89571Pa T=2833(0.01C) | BARO1 p=91156Pa T=3040(0.01C)
+SF #2315 t=50374ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(291,77,1000)mg g=(278,-1176,-42)x0.1dps T=29C | IMU1 a=(95,-290,1013)mg g=(-1170,-273,0)x0.1dps T=28C
+  BARO0 p=89548Pa T=2828(0.01C) | BARO1 p=91137Pa T=3039(0.01C)
+SF #2328 t=50628ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(513,103,777)mg g=(53,-294,55)x0.1dps T=28C | IMU1 a=(107,-524,828)mg g=(-293,-55,63)x0.1dps T=28C
+  BARO0 p=89628Pa T=2834(0.01C) | BARO1 p=91141Pa T=3043(0.01C)
+SF #2341 t=50893ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(711,-12,746)mg g=(-1381,183,920)x0.1dps T=30C | IMU1 a=(-12,-626,838)mg g=(216,1341,929)x0.1dps T=28C
+  BARO0 p=89598Pa T=2831(0.01C) | BARO1 p=91151Pa T=3039(0.01C)
+SF #2354 t=51153ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(543,-226,892)mg g=(-324,214,-424)x0.1dps T=29C | IMU1 a=(-217,-473,874)mg g=(182,321,-434)x0.1dps T=28C
+  BARO0 p=89582Pa T=2838(0.01C) | BARO1 p=91067Pa T=3041(0.01C)
+SF #2367 t=51412ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(688,-95,845)mg g=(474,-223,-149)x0.1dps T=28C | IMU1 a=(-61,-620,878)mg g=(-223,-486,-115)x0.1dps T=28C
+  BARO0 p=89578Pa T=2832(0.01C) | BARO1 p=91060Pa T=3043(0.01C)
+SF #2380 t=51680ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(727,60,616)mg g=(434,-291,-162)x0.1dps T=29C | IMU1 a=(67,-709,748)mg g=(-292,-425,-151)x0.1dps T=28C
+  BARO0 p=89578Pa T=2832(0.01C) | BARO1 p=91048Pa T=3039(0.01C)
+SF #2393 t=51931ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(839,-9,559)mg g=(371,-297,425)x0.1dps T=29C | IMU1 a=(2,-788,571)mg g=(-289,-372,434)x0.1dps T=28C
+  BARO0 p=89550Pa T=2835(0.01C) | BARO1 p=91079Pa T=3040(0.01C)
+SF #2406 t=52189ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(871,-13,540)mg g=(863,-319,187)x0.1dps T=29C | IMU1 a=(-6,-832,506)mg g=(-310,-862,202)x0.1dps T=28C
+  BARO0 p=89580Pa T=2834(0.01C) | BARO1 p=91118Pa T=3040(0.01C)
+SF #2419 t=52452ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1011,125,244)mg g=(542,-209,92)x0.1dps T=29C | IMU1 a=(134,-970,254)mg g=(-203,-545,107)x0.1dps T=28C
+  BARO0 p=89580Pa T=2833(0.01C) | BARO1 p=91171Pa T=3040(0.01C)
+SF #2432 t=52709ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1027,32,204)mg g=(492,-133,74)x0.1dps T=29C | IMU1 a=(49,-1001,183)mg g=(-132,-482,86)x0.1dps T=28C
+  BARO0 p=89569Pa T=2834(0.01C) | BARO1 p=91221Pa T=3038(0.01C)
+SF #2445 t=52970ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(955,203,55)mg g=(406,-268,-1)x0.1dps T=28C | IMU1 a=(210,-928,9)mg g=(-284,-421,4)x0.1dps T=28C
+  BARO0 p=89552Pa T=2830(0.01C) | BARO1 p=91207Pa T=3041(0.01C)
+SF #2458 t=53227ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1013,238,-14)mg g=(210,117,133)x0.1dps T=29C | IMU1 a=(229,-1013,-41)mg g=(121,-218,134)x0.1dps T=29C
+  BARO0 p=89605Pa T=2836(0.01C) | BARO1 p=91237Pa T=3044(0.01C)
+SF #2471 t=53493ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(966,152,-111)mg g=(339,-146,10)x0.1dps T=29C | IMU1 a=(155,-917,-136)mg g=(-139,-340,14)x0.1dps T=28C
+  BARO0 p=89555Pa T=2831(0.01C) | BARO1 p=91203Pa T=3043(0.01C)
+SF #2484 t=53749ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(981,132,-103)mg g=(-14,-65,-51)x0.1dps T=29C | IMU1 a=(128,-961,-102)mg g=(-64,16,-50)x0.1dps T=28C
+  BARO0 p=89576Pa T=2833(0.01C) | BARO1 p=91190Pa T=3040(0.01C)
+SF #2497 t=54008ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(965,95,-111)mg g=(-148,-45,78)x0.1dps T=29C | IMU1 a=(89,-937,-57)mg g=(-46,142,77)x0.1dps T=28C
+  BARO0 p=89577Pa T=2830(0.01C) | BARO1 p=91145Pa T=3039(0.01C)
+SF #2510 t=54275ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(963,104,-91)mg g=(-25,-46,-142)x0.1dps T=29C | IMU1 a=(110,-944,-63)mg g=(-57,16,-141)x0.1dps T=28C
+  BARO0 p=89566Pa T=2830(0.01C) | BARO1 p=91125Pa T=3041(0.01C)
+SF #2523 t=54534ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(986,135,-59)mg g=(-9,-7,-30)x0.1dps T=29C | IMU1 a=(132,-960,-45)mg g=(-6,15,-33)x0.1dps T=28C
+  BARO0 p=89614Pa T=2837(0.01C) | BARO1 p=91107Pa T=3038(0.01C)
+SF #2536 t=54787ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(990,149,-79)mg g=(48,30,-26)x0.1dps T=29C | IMU1 a=(145,-979,-86)mg g=(30,-50,-26)x0.1dps T=28C
+  BARO0 p=89585Pa T=2831(0.01C) | BARO1 p=91050Pa T=3036(0.01C)
+SF #2549 t=55048ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(984,142,-93)mg g=(18,-17,-18)x0.1dps T=29C | IMU1 a=(144,-968,-91)mg g=(-14,-15,-19)x0.1dps T=29C
+  BARO0 p=89564Pa T=2838(0.01C) | BARO1 p=91068Pa T=3035(0.01C)
+SF #2562 t=55307ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1030,122,-86)mg g=(-29,1,-21)x0.1dps T=28C | IMU1 a=(118,-1009,-90)mg g=(1,31,-23)x0.1dps T=28C
+  BARO0 p=89542Pa T=2828(0.01C) | BARO1 p=91053Pa T=3040(0.01C)
+SF #2575 t=55573ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,140,-79)mg g=(29,-92,12)x0.1dps T=29C | IMU1 a=(141,-971,-83)mg g=(-91,-26,14)x0.1dps T=28C
+  BARO0 p=89571Pa T=2831(0.01C) | BARO1 p=91058Pa T=3038(0.01C)
+SF #2588 t=55828ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(994,160,-95)mg g=(17,22,24)x0.1dps T=29C | IMU1 a=(156,-977,-89)mg g=(22,-16,24)x0.1dps T=28C
+  BARO0 p=89562Pa T=2837(0.01C) | BARO1 p=91068Pa T=3039(0.01C)
+SF #2601 t=56092ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1002,151,-121)mg g=(-6,-49,19)x0.1dps T=29C | IMU1 a=(160,-981,-121)mg g=(-46,5,19)x0.1dps T=28C
+  BARO0 p=89555Pa T=2834(0.01C) | BARO1 p=90973Pa T=3040(0.01C)
+SF #2614 t=56348ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(990,154,-129)mg g=(24,8,-8)x0.1dps T=29C | IMU1 a=(148,-972,-116)mg g=(5,-17,-8)x0.1dps T=28C
+  BARO0 p=89579Pa T=2835(0.01C) | BARO1 p=90918Pa T=3033(0.01C)
+SF #2627 t=56613ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(994,133,-108)mg g=(-17,-16,7)x0.1dps T=29C | IMU1 a=(128,-970,-106)mg g=(-15,20,6)x0.1dps T=28C
+  BARO0 p=89607Pa T=2836(0.01C) | BARO1 p=90886Pa T=3039(0.01C)
+SF #2640 t=56881ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1005,152,-110)mg g=(18,77,-7)x0.1dps T=29C | IMU1 a=(156,-986,-111)mg g=(78,-17,-12)x0.1dps T=28C
+  BARO0 p=89574Pa T=2832(0.01C) | BARO1 p=90868Pa T=3042(0.01C)
+SF #2653 t=57134ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,137,-122)mg g=(-2,-48,5)x0.1dps T=29C | IMU1 a=(135,-958,-133)mg g=(-46,3,7)x0.1dps T=28C
+  BARO0 p=89566Pa T=2834(0.01C) | BARO1 p=90868Pa T=3039(0.01C)
+SF #2666 t=57387ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(983,158,-135)mg g=(23,35,10)x0.1dps T=29C | IMU1 a=(159,-960,-132)mg g=(34,-24,10)x0.1dps T=28C
+  BARO0 p=89582Pa T=2831(0.01C) | BARO1 p=90890Pa T=3033(0.01C)
+SF #2678 t=57638ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(905,172,-181)mg g=(33,-41,-2)x0.1dps T=29C | IMU1 a=(171,-883,-176)mg g=(-41,-35,-2)x0.1dps T=28C
+  BARO0 p=89549Pa T=2825(0.01C) | BARO1 p=90824Pa T=3037(0.01C)
+SF #2691 t=57894ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(999,148,-129)mg g=(-5,9,14)x0.1dps T=28C | IMU1 a=(142,-974,-123)mg g=(11,7,12)x0.1dps T=28C
+  BARO0 p=89602Pa T=2834(0.01C) | BARO1 p=90819Pa T=3036(0.01C)
+SF #2704 t=58147ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1009,138,-123)mg g=(-8,20,-2)x0.1dps T=28C | IMU1 a=(131,-981,-119)mg g=(23,9,-5)x0.1dps T=28C
+  BARO0 p=89560Pa T=2837(0.01C) | BARO1 p=90814Pa T=3033(0.01C)
+SF #2717 t=58407ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(960,158,-169)mg g=(7,-150,-6)x0.1dps T=29C | IMU1 a=(159,-941,-163)mg g=(-155,-3,-1)x0.1dps T=29C
+  BARO0 p=89549Pa T=2835(0.01C) | BARO1 p=90777Pa T=3033(0.01C)
+SF #2730 t=58678ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(967,141,-123)mg g=(15,115,-17)x0.1dps T=29C | IMU1 a=(142,-940,-117)mg g=(116,-13,-23)x0.1dps T=28C
+  BARO0 p=89548Pa T=2832(0.01C) | BARO1 p=90806Pa T=3033(0.01C)
+SF #2743 t=58933ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,152,-113)mg g=(-8,-19,19)x0.1dps T=29C | IMU1 a=(155,-973,-108)mg g=(-18,9,18)x0.1dps T=28C
+  BARO0 p=89570Pa T=2835(0.01C) | BARO1 p=90810Pa T=3033(0.01C)
+SF #2756 t=59188ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,149,-118)mg g=(40,-100,34)x0.1dps T=29C | IMU1 a=(137,-984,-130)mg g=(-99,-38,35)x0.1dps T=28C
+  BARO0 p=89539Pa T=2840(0.01C) | BARO1 p=90840Pa T=3033(0.01C)
+SF #2769 t=59453ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(988,142,-129)mg g=(13,0,-7)x0.1dps T=29C | IMU1 a=(135,-957,-137)mg g=(-1,-11,-9)x0.1dps T=28C
+  BARO0 p=89561Pa T=2834(0.01C) | BARO1 p=90746Pa T=3033(0.01C)
+SF #2782 t=59714ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(986,142,-150)mg g=(-4,-66,8)x0.1dps T=29C | IMU1 a=(139,-968,-143)mg g=(-64,6,10)x0.1dps T=28C
+  BARO0 p=89599Pa T=2832(0.01C) | BARO1 p=90707Pa T=3031(0.01C)
+SF #2795 t=59970ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,121,-151)mg g=(-12,45,-1)x0.1dps T=29C | IMU1 a=(122,-967,-151)mg g=(44,12,-5)x0.1dps T=28C
+  BARO0 p=89586Pa T=2835(0.01C) | BARO1 p=90720Pa T=3032(0.01C)
+SF #2808 t=60229ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(997,139,-139)mg g=(16,-8,0)x0.1dps T=29C | IMU1 a=(138,-979,-136)mg g=(-6,-16,0)x0.1dps T=28C
+  BARO0 p=89599Pa T=2835(0.01C) | BARO1 p=90802Pa T=3036(0.01C)
+SF #2821 t=60491ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(971,124,-127)mg g=(1,78,12)x0.1dps T=29C | IMU1 a=(121,-955,-125)mg g=(80,-1,7)x0.1dps T=28C
+  BARO0 p=89556Pa T=2833(0.01C) | BARO1 p=90792Pa T=3031(0.01C)
+SF #2834 t=60749ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(972,135,-160)mg g=(10,12,-10)x0.1dps T=29C | IMU1 a=(126,-959,-157)mg g=(12,-8,-12)x0.1dps T=28C
+  BARO0 p=89559Pa T=2838(0.01C) | BARO1 p=90848Pa T=3031(0.01C)
+SF #2847 t=61010ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(980,144,-110)mg g=(18,62,17)x0.1dps T=28C | IMU1 a=(144,-965,-110)mg g=(61,-17,12)x0.1dps T=28C
+  BARO0 p=89552Pa T=2830(0.01C) | BARO1 p=90887Pa T=3040(0.01C)
+SF #2860 t=61276ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1001,141,-122)mg g=(-14,22,4)x0.1dps T=29C | IMU1 a=(142,-985,-125)mg g=(22,16,3)x0.1dps T=28C
+  BARO0 p=89596Pa T=2838(0.01C) | BARO1 p=90863Pa T=3034(0.01C)
+SF #2873 t=61534ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(988,134,-110)mg g=(-20,-22,-13)x0.1dps T=29C | IMU1 a=(131,-970,-108)mg g=(-22,22,-14)x0.1dps T=28C
+  BARO0 p=89593Pa T=2836(0.01C) | BARO1 p=90898Pa T=3035(0.01C)
+SF #2886 t=61792ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1028,131,-115)mg g=(12,-76,-20)x0.1dps T=28C | IMU1 a=(128,-1011,-110)mg g=(-72,-10,-16)x0.1dps T=28C
+  BARO0 p=89596Pa T=2835(0.01C) | BARO1 p=90895Pa T=3038(0.01C)
+SF #2899 t=62048ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1043,187,-112)mg g=(-40,55,-7)x0.1dps T=29C | IMU1 a=(183,-1016,-114)mg g=(51,41,-9)x0.1dps T=28C
+  BARO0 p=89563Pa T=2831(0.01C) | BARO1 p=90928Pa T=3030(0.01C)
+SF #2912 t=62313ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1013,140,-112)mg g=(21,72,19)x0.1dps T=29C | IMU1 a=(133,-995,-109)mg g=(73,-20,15)x0.1dps T=28C
+  BARO0 p=89592Pa T=2835(0.01C) | BARO1 p=90954Pa T=3039(0.01C)
+SF #2925 t=62573ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1005,158,-165)mg g=(25,-20,10)x0.1dps T=29C | IMU1 a=(155,-991,-160)mg g=(-19,-26,7)x0.1dps T=28C
+  BARO0 p=89564Pa T=2836(0.01C) | BARO1 p=90923Pa T=3031(0.01C)
+SF #2938 t=62828ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(986,122,-145)mg g=(-14,21,-14)x0.1dps T=29C | IMU1 a=(116,-968,-138)mg g=(21,14,-16)x0.1dps T=28C
+  BARO0 p=89558Pa T=2831(0.01C) | BARO1 p=90942Pa T=3032(0.01C)
+SF #2950 t=63078ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(971,131,-138)mg g=(8,76,0)x0.1dps T=28C | IMU1 a=(124,-942,-142)mg g=(74,-6,-5)x0.1dps T=28C
+  BARO0 p=89537Pa T=2840(0.01C) | BARO1 p=90937Pa T=3031(0.01C)
+SF #2964 t=63352ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(962,137,-139)mg g=(23,-13,9)x0.1dps T=29C | IMU1 a=(126,-949,-133)mg g=(-24,-18,4)x0.1dps T=28C
+  BARO0 p=89612Pa T=2834(0.01C) | BARO1 p=90960Pa T=3035(0.01C)
+SF #2977 t=63610ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1009,109,-112)mg g=(4,-57,3)x0.1dps T=29C | IMU1 a=(105,-983,-109)mg g=(-55,-1,2)x0.1dps T=28C
+  BARO0 p=89547Pa T=2832(0.01C) | BARO1 p=90998Pa T=3044(0.01C)
+SF #2990 t=63876ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(996,117,-124)mg g=(8,55,-14)x0.1dps T=29C | IMU1 a=(113,-977,-122)mg g=(55,-6,-18)x0.1dps T=28C
+  BARO0 p=89553Pa T=2836(0.01C) | BARO1 p=90974Pa T=3034(0.01C)
+SF #3003 t=64130ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(981,123,-148)mg g=(7,-27,1)x0.1dps T=29C | IMU1 a=(123,-951,-142)mg g=(-27,-6,0)x0.1dps T=28C
+  BARO0 p=89559Pa T=2833(0.01C) | BARO1 p=90978Pa T=3034(0.01C)
+SF #3016 t=64393ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(979,117,-149)mg g=(-6,22,-2)x0.1dps T=29C | IMU1 a=(110,-958,-147)mg g=(21,9,-5)x0.1dps T=28C
+  BARO0 p=89581Pa T=2833(0.01C) | BARO1 p=91003Pa T=3041(0.01C)
+SF #3029 t=64646ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(973,139,-157)mg g=(-7,-6,-8)x0.1dps T=28C | IMU1 a=(131,-956,-149)mg g=(-6,10,-7)x0.1dps T=29C
+  BARO0 p=89576Pa T=2831(0.01C) | BARO1 p=91000Pa T=3034(0.01C)
+SF #3042 t=64907ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(996,128,-127)mg g=(-9,43,7)x0.1dps T=29C | IMU1 a=(124,-974,-129)mg g=(42,11,3)x0.1dps T=28C
+  BARO0 p=89542Pa T=2836(0.01C) | BARO1 p=91066Pa T=3043(0.01C)
+SF #3055 t=65167ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1007,136,-129)mg g=(3,-103,8)x0.1dps T=28C | IMU1 a=(131,-984,-126)mg g=(-105,-2,11)x0.1dps T=28C
+  BARO0 p=89596Pa T=2836(0.01C) | BARO1 p=91023Pa T=3039(0.01C)
+SF #3068 t=65433ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(989,123,-139)mg g=(5,-13,22)x0.1dps T=29C | IMU1 a=(122,-971,-139)mg g=(-13,-4,21)x0.1dps T=28C
+  BARO0 p=89600Pa T=2838(0.01C) | BARO1 p=91011Pa T=3039(0.01C)
+SF #3081 t=65694ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1004,117,-107)mg g=(11,27,-14)x0.1dps T=29C | IMU1 a=(109,-980,-107)mg g=(27,-10,-16)x0.1dps T=28C
+  BARO0 p=89555Pa T=2832(0.01C) | BARO1 p=91001Pa T=3040(0.01C)
+SF #3094 t=65953ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,127,-114)mg g=(2,-24,-4)x0.1dps T=29C | IMU1 a=(122,-976,-108)mg g=(-24,-1,-5)x0.1dps T=28C
+  BARO0 p=89606Pa T=2839(0.01C) | BARO1 p=90929Pa T=3034(0.01C)
+SF #3107 t=66211ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(991,128,-113)mg g=(-2,-37,0)x0.1dps T=29C | IMU1 a=(126,-963,-113)mg g=(-36,6,-1)x0.1dps T=28C
+  BARO0 p=89540Pa T=2833(0.01C) | BARO1 p=90878Pa T=3037(0.01C)
+SF #3120 t=66475ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(996,120,-121)mg g=(26,87,-4)x0.1dps T=29C | IMU1 a=(115,-975,-118)mg g=(85,-24,-10)x0.1dps T=28C
+  BARO0 p=89580Pa T=2835(0.01C) | BARO1 p=90790Pa T=3037(0.01C)
+SF #3133 t=66731ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(978,136,-103)mg g=(0,1,27)x0.1dps T=29C | IMU1 a=(131,-959,-102)mg g=(3,2,25)x0.1dps T=28C
+  BARO0 p=89536Pa T=2830(0.01C) | BARO1 p=90763Pa T=3032(0.01C)
+SF #3146 t=66987ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(976,119,-135)mg g=(40,38,10)x0.1dps T=29C | IMU1 a=(118,-957,-139)mg g=(38,-37,7)x0.1dps T=28C
+  BARO0 p=89589Pa T=2831(0.01C) | BARO1 p=90733Pa T=3032(0.01C)
+SF #3159 t=67249ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(973,112,-92)mg g=(-6,-4,-2)x0.1dps T=29C | IMU1 a=(108,-947,-96)mg g=(-4,8,-5)x0.1dps T=28C
+  BARO0 p=89583Pa T=2832(0.01C) | BARO1 p=90736Pa T=3034(0.01C)
+SF #3172 t=67509ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1019,108,-85)mg g=(-9,-19,-18)x0.1dps T=29C | IMU1 a=(101,-992,-81)mg g=(-18,11,-19)x0.1dps T=28C
+  BARO0 p=89580Pa T=2834(0.01C) | BARO1 p=90757Pa T=3037(0.01C)
+SF #3185 t=67773ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(986,108,-124)mg g=(-5,-39,3)x0.1dps T=29C | IMU1 a=(110,-958,-116)mg g=(-34,10,0)x0.1dps T=28C
+  BARO0 p=89547Pa T=2829(0.01C) | BARO1 p=90776Pa T=3035(0.01C)
+SF #3198 t=68036ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(988,115,-113)mg g=(-1,-9,0)x0.1dps T=28C | IMU1 a=(111,-968,-111)mg g=(-6,1,-1)x0.1dps T=28C
+  BARO0 p=89572Pa T=2836(0.01C) | BARO1 p=90797Pa T=3036(0.01C)
+SF #3211 t=68295ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1009,118,-109)mg g=(-11,10,-2)x0.1dps T=29C | IMU1 a=(112,-989,-110)mg g=(9,15,-4)x0.1dps T=28C
+  BARO0 p=89540Pa T=2834(0.01C) | BARO1 p=90827Pa T=3035(0.01C)
+SF #3224 t=68553ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(983,102,-125)mg g=(-4,-27,-5)x0.1dps T=29C | IMU1 a=(98,-964,-128)mg g=(-27,4,-7)x0.1dps T=28C
+  BARO0 p=89582Pa T=2833(0.01C) | BARO1 p=90845Pa T=3030(0.01C)
+SF #3237 t=68808ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(992,118,-128)mg g=(7,-39,14)x0.1dps T=29C | IMU1 a=(110,-968,-130)mg g=(-39,-7,14)x0.1dps T=28C
+  BARO0 p=89582Pa T=2834(0.01C) | BARO1 p=90878Pa T=3033(0.01C)
+SF #3250 t=69081ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(990,125,-143)mg g=(-10,10,-2)x0.1dps T=29C | IMU1 a=(123,-970,-139)mg g=(11,11,-5)x0.1dps T=28C
+  BARO0 p=89576Pa T=2836(0.01C) | BARO1 p=90896Pa T=3031(0.01C)
+SF #3264 t=69347ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(983,106,-136)mg g=(0,-37,3)x0.1dps T=29C | IMU1 a=(103,-960,-131)mg g=(-33,1,3)x0.1dps T=28C
+  BARO0 p=89542Pa T=2829(0.01C) | BARO1 p=90968Pa T=3041(0.01C)
+Log was unsuccessful
+SF #3277 t=69609ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(953,128,-145)mg g=(-28,-69,-10)x0.1dps T=29C | IMU1 a=(116,-945,-148)mg g=(-67,31,-7)x0.1dps T=28C
+  BARO0 p=89532Pa T=2827(0.01C) | BARO1 p=90963Pa T=3032(0.01C)
+SF #3290 t=69876ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,120,-131)mg g=(10,74,-1)x0.1dps T=29C | IMU1 a=(117,-970,-128)mg g=(74,-8,-5)x0.1dps T=28C
+  BARO0 p=89594Pa T=2837(0.01C) | BARO1 p=90973Pa T=3034(0.01C)
+SF #3303 t=70134ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1004,109,-115)mg g=(25,71,8)x0.1dps T=29C | IMU1 a=(106,-971,-116)mg g=(70,-24,4)x0.1dps T=28C
+  BARO0 p=89591Pa T=2836(0.01C) | BARO1 p=91014Pa T=3033(0.01C)
+SF #3316 t=70391ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(994,114,-142)mg g=(-1,-88,19)x0.1dps T=29C | IMU1 a=(106,-976,-143)mg g=(-87,2,20)x0.1dps T=29C
+  BARO0 p=89596Pa T=2841(0.01C) | BARO1 p=91020Pa T=3035(0.01C)
+SF #3329 t=70648ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(991,100,-162)mg g=(9,-13,12)x0.1dps T=29C | IMU1 a=(99,-963,-158)mg g=(-13,-8,11)x0.1dps T=28C
+  BARO0 p=89564Pa T=2832(0.01C) | BARO1 p=91087Pa T=3037(0.01C)
+SF #3342 t=70913ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(965,99,-161)mg g=(-4,27,9)x0.1dps T=29C | IMU1 a=(100,-946,-164)mg g=(29,2,7)x0.1dps T=28C
+  BARO0 p=89603Pa T=2841(0.01C) | BARO1 p=91035Pa T=3033(0.01C)
+SF #3355 t=71172ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(976,112,-160)mg g=(-5,36,-12)x0.1dps T=28C | IMU1 a=(108,-966,-161)mg g=(34,5,-13)x0.1dps T=28C
+  BARO0 p=89544Pa T=2832(0.01C) | BARO1 p=91032Pa T=3037(0.01C)
+SF #3368 t=71435ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,107,-139)mg g=(-16,-51,-14)x0.1dps T=29C | IMU1 a=(101,-975,-135)mg g=(-50,17,-15)x0.1dps T=28C
+  BARO0 p=89610Pa T=2835(0.01C) | BARO1 p=91019Pa T=3037(0.01C)
+SF #3381 t=71697ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1020,115,-124)mg g=(0,-30,11)x0.1dps T=29C | IMU1 a=(108,-1001,-126)mg g=(-29,2,10)x0.1dps T=28C
+  BARO0 p=89581Pa T=2838(0.01C) | BARO1 p=91010Pa T=3043(0.01C)
+SF #3394 t=71949ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1011,96,-125)mg g=(0,28,1)x0.1dps T=29C | IMU1 a=(93,-988,-122)mg g=(29,2,-1)x0.1dps T=28C
+  BARO0 p=89563Pa T=2827(0.01C) | BARO1 p=91015Pa T=3038(0.01C)
+SF #3407 t=72209ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(998,106,-131)mg g=(-5,-20,22)x0.1dps T=29C | IMU1 a=(103,-977,-123)mg g=(-20,4,21)x0.1dps T=28C
+  BARO0 p=89554Pa T=2831(0.01C) | BARO1 p=91008Pa T=3043(0.01C)
+SF #3420 t=72481ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(983,104,-147)mg g=(0,-9,-21)x0.1dps T=29C | IMU1 a=(97,-962,-142)mg g=(-8,2,-22)x0.1dps T=27C
+  BARO0 p=89571Pa T=2833(0.01C) | BARO1 p=90990Pa T=3039(0.01C)
+SF #3433 t=72734ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1002,105,-129)mg g=(-7,30,-12)x0.1dps T=29C | IMU1 a=(99,-978,-132)mg g=(32,11,-14)x0.1dps T=28C
+  BARO0 p=89592Pa T=2833(0.01C) | BARO1 p=91027Pa T=3036(0.01C)
+SF #3446 t=72992ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(987,102,-134)mg g=(-3,-77,-7)x0.1dps T=29C | IMU1 a=(100,-971,-136)mg g=(-74,5,-3)x0.1dps T=28C
+  BARO0 p=89597Pa T=2836(0.01C) | BARO1 p=90975Pa T=3035(0.01C)
+SF #3459 t=73254ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(969,115,-120)mg g=(24,-31,14)x0.1dps T=29C | IMU1 a=(110,-956,-130)mg g=(-29,-24,14)x0.1dps T=28C
+  BARO0 p=89607Pa T=2832(0.01C) | BARO1 p=90954Pa T=3034(0.01C)
+SF #3472 t=73512ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(963,102,-175)mg g=(7,31,2)x0.1dps T=29C | IMU1 a=(95,-940,-177)mg g=(32,-6,-1)x0.1dps T=28C
+  BARO0 p=89554Pa T=2832(0.01C) | BARO1 p=90979Pa T=3046(0.01C)
+SF #3485 t=73768ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1013,97,-136)mg g=(50,169,-14)x0.1dps T=29C | IMU1 a=(95,-994,-140)mg g=(168,-49,-21)x0.1dps T=28C
+  BARO0 p=89554Pa T=2832(0.01C) | BARO1 p=90909Pa T=3035(0.01C)
+SF #3498 t=74027ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(986,135,-159)mg g=(-33,-74,33)x0.1dps T=29C | IMU1 a=(129,-965,-148)mg g=(-71,34,35)x0.1dps T=29C
+  BARO0 p=89655Pa T=2837(0.01C) | BARO1 p=90911Pa T=3034(0.01C)
+SF #3510 t=74278ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(950,58,-142)mg g=(-26,-148,-32)x0.1dps T=28C | IMU1 a=(60,-935,-156)mg g=(-146,32,-30)x0.1dps T=28C
+  BARO0 p=89584Pa T=2833(0.01C) | BARO1 p=90914Pa T=3041(0.01C)
+SF #3523 t=74536ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1029,102,-138)mg g=(42,206,-28)x0.1dps T=29C | IMU1 a=(95,-1002,-138)mg g=(204,-41,-35)x0.1dps T=28C
+  BARO0 p=89594Pa T=2837(0.01C) | BARO1 p=90897Pa T=3036(0.01C)
+SF #3537 t=74808ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(999,117,-167)mg g=(-2,41,-10)x0.1dps T=28C | IMU1 a=(108,-964,-163)mg g=(43,6,-12)x0.1dps T=28C
+  BARO0 p=89635Pa T=2837(0.01C) | BARO1 p=90891Pa T=3034(0.01C)
+SF #3550 t=75078ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(995,125,-159)mg g=(1,45,6)x0.1dps T=29C | IMU1 a=(122,-975,-157)mg g=(45,0,3)x0.1dps T=28C
+  BARO0 p=89553Pa T=2833(0.01C) | BARO1 p=90914Pa T=3037(0.01C)
+SF #3563 t=75333ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(988,118,-183)mg g=(-16,-129,24)x0.1dps T=29C | IMU1 a=(105,-983,-178)mg g=(-127,22,31)x0.1dps T=28C
+  BARO0 p=89609Pa T=2835(0.01C) | BARO1 p=90946Pa T=3041(0.01C)
+SF #3576 t=75587ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(994,102,-193)mg g=(12,7,3)x0.1dps T=28C | IMU1 a=(91,-975,-190)mg g=(8,-10,2)x0.1dps T=28C
+  BARO0 p=89565Pa T=2831(0.01C) | BARO1 p=90955Pa T=3035(0.01C)
+SF #3589 t=75849ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(968,106,-200)mg g=(0,-14,3)x0.1dps T=29C | IMU1 a=(100,-948,-196)mg g=(-15,2,2)x0.1dps T=28C
+  BARO0 p=89534Pa T=2832(0.01C) | BARO1 p=90977Pa T=3038(0.01C)
+APF_RawStream
+SensorFrame raw print OFF
+APF_RawStream
+SensorFrame raw print ON
+SF #3868 t=81428ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,-26,1009)mg g=(-7,-9,-4)x0.1dps T=29C | IMU1 a=(-10,13,1023)mg g=(-9,10,-4)x0.1dps T=28C
+  BARO0 p=89584Pa T=2836(0.01C) | BARO1 p=90525Pa T=3033(0.01C)
+SF #3880 t=81679ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(19,-28,1005)mg g=(-2,-4,13)x0.1dps T=28C | IMU1 a=(-15,5,1018)mg g=(-3,3,8)x0.1dps T=28C
+  BARO0 p=89592Pa T=2837(0.01C) | BARO1 p=90523Pa T=3034(0.01C)
+SF #3893 t=81929ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-32,998)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-13,10,1018)mg g=(0,2,0)x0.1dps T=28C
+  BARO0 p=89566Pa T=2832(0.01C) | BARO1 p=90510Pa T=3040(0.01C)
+SF #3906 t=82188ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-28,1001)mg g=(-1,-1,1)x0.1dps T=29C | IMU1 a=(-19,12,1015)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89566Pa T=2830(0.01C) | BARO1 p=90480Pa T=3027(0.01C)
+SF #3919 t=82453ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-29,1004)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-15,16,1026)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89581Pa T=2832(0.01C) | BARO1 p=90447Pa T=3027(0.01C)
+SF #3932 t=82708ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(6,-29,999)mg g=(0,0,1)x0.1dps T=29C | IMU1 a=(-12,11,1015)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89597Pa T=2834(0.01C) | BARO1 p=90452Pa T=3032(0.01C)
+SF #3945 t=82969ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-30,998)mg g=(1,1,1)x0.1dps T=29C | IMU1 a=(-14,13,1009)mg g=(1,0,0)x0.1dps T=27C
+  BARO0 p=89588Pa T=2829(0.01C) | BARO1 p=90471Pa T=3036(0.01C)
+SF #3958 t=83232ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1,-28,1000)mg g=(2,1,1)x0.1dps T=29C | IMU1 a=(-19,15,1018)mg g=(1,-1,0)x0.1dps T=27C
+  BARO0 p=89606Pa T=2838(0.01C) | BARO1 p=90446Pa T=3027(0.01C)
+SF #3971 t=83492ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-30,1001)mg g=(0,0,1)x0.1dps T=29C | IMU1 a=(-14,9,1017)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89572Pa T=2836(0.01C) | BARO1 p=90462Pa T=3030(0.01C)
+SF #3984 t=83747ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-31,1002)mg g=(0,-1,2)x0.1dps T=29C | IMU1 a=(-18,11,1019)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89576Pa T=2831(0.01C) | BARO1 p=90469Pa T=3031(0.01C)
+SF #3997 t=84010ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-30,1001)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-15,8,1020)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89559Pa T=2832(0.01C) | BARO1 p=90420Pa T=3032(0.01C)
+SF #4010 t=84277ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1,-28,999)mg g=(0,-1,1)x0.1dps T=28C | IMU1 a=(-13,16,1015)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89592Pa T=2834(0.01C) | BARO1 p=90429Pa T=3035(0.01C)
+SF #4023 t=84529ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-30,1000)mg g=(1,-1,1)x0.1dps T=29C | IMU1 a=(-13,11,1013)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89574Pa T=2833(0.01C) | BARO1 p=90391Pa T=3028(0.01C)
+SF #4036 t=84788ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(8,-32,997)mg g=(1,-1,0)x0.1dps T=28C | IMU1 a=(-14,13,1013)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89564Pa T=2836(0.01C) | BARO1 p=90379Pa T=3031(0.01C)
+SF #4049 t=85053ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-30,1002)mg g=(0,0,1)x0.1dps T=29C | IMU1 a=(-12,7,1018)mg g=(0,1,1)x0.1dps T=28C
+  BARO0 p=89545Pa T=2830(0.01C) | BARO1 p=90353Pa T=3028(0.01C)
+SF #4062 t=85309ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-28,1004)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-12,9,1021)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89586Pa T=2834(0.01C) | BARO1 p=90322Pa T=3022(0.01C)
+SF #4075 t=85573ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-30,997)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-14,9,1017)mg g=(-1,2,1)x0.1dps T=28C
+  BARO0 p=89575Pa T=2827(0.01C) | BARO1 p=90290Pa T=3028(0.01C)
+SF #4088 t=85827ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-26,999)mg g=(3,1,1)x0.1dps T=29C | IMU1 a=(-18,15,1017)mg g=(1,-1,0)x0.1dps T=28C
+  BARO0 p=89571Pa T=2824(0.01C) | BARO1 p=90339Pa T=3027(0.01C)
+SF #4100 t=86078ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-28,999)mg g=(1,-1,1)x0.1dps T=29C | IMU1 a=(-11,12,1018)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89574Pa T=2836(0.01C) | BARO1 p=90370Pa T=3029(0.01C)
+Log was unsuccessful
+SF #4113 t=86329ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-30,998)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-18,12,1018)mg g=(-1,2,1)x0.1dps T=28C
+  BARO0 p=89540Pa T=2827(0.01C) | BARO1 p=90337Pa T=3027(0.01C)
+SF #4126 t=86587ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-26,1001)mg g=(1,0,0)x0.1dps T=29C | IMU1 a=(-13,13,1016)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89568Pa T=2833(0.01C) | BARO1 p=90334Pa T=3025(0.01C)
+SF #4139 t=86847ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(0,-30,998)mg g=(1,0,1)x0.1dps T=28C | IMU1 a=(-11,14,1016)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89558Pa T=2833(0.01C) | BARO1 p=90347Pa T=3029(0.01C)
+SF #4152 t=87110ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-33,1000)mg g=(1,-1,2)x0.1dps T=28C | IMU1 a=(-12,12,1017)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89551Pa T=2831(0.01C) | BARO1 p=90393Pa T=3030(0.01C)
+Log was unsuccessful
+SF #4165 t=87373ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(4,-30,1000)mg g=(0,-2,2)x0.1dps T=29C | IMU1 a=(-16,9,1022)mg g=(-1,1,0)x0.1dps T=27C
+  BARO0 p=89579Pa T=2829(0.01C) | BARO1 p=90409Pa T=3026(0.01C)
+SF #4178 t=87627ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-29,1000)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-17,14,1019)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89596Pa T=2829(0.01C) | BARO1 p=90413Pa T=3025(0.01C)
+SF #4190 t=87878ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-32,1002)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-16,13,1022)mg g=(-1,1,0)x0.1dps T=28C
+  BARO0 p=89569Pa T=2830(0.01C) | BARO1 p=90378Pa T=3028(0.01C)
+SF #4203 t=88129ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(1,-29,1004)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-14,12,1020)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89598Pa T=2827(0.01C) | BARO1 p=90328Pa T=3023(0.01C)
+SF #4216 t=88388ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-30,998)mg g=(1,0,1)x0.1dps T=28C | IMU1 a=(-16,12,1021)mg g=(0,0,0)x0.1dps T=27C
+  BARO0 p=89568Pa T=2824(0.01C) | BARO1 p=90342Pa T=3030(0.01C)
+SF #4229 t=88649ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-32,997)mg g=(2,0,2)x0.1dps T=28C | IMU1 a=(-15,14,1012)mg g=(0,0,0)x0.1dps T=28C
+  BARO0 p=89538Pa T=2826(0.01C) | BARO1 p=90293Pa T=3024(0.01C)
+SF #4242 t=88913ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-28,999)mg g=(0,-2,1)x0.1dps T=29C | IMU1 a=(-12,16,1018)mg g=(1,1,0)x0.1dps T=28C
+  BARO0 p=89565Pa T=2830(0.01C) | BARO1 p=90303Pa T=3024(0.01C)
+SF #4255 t=89172ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-30,999)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-13,17,1018)mg g=(-1,2,0)x0.1dps T=28C
+  BARO0 p=89557Pa T=2828(0.01C) | BARO1 p=90271Pa T=3022(0.01C)
+SF #4268 t=89430ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(0,-29,1004)mg g=(0,-2,0)x0.1dps T=28C | IMU1 a=(-13,13,1020)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89581Pa T=2828(0.01C) | BARO1 p=90327Pa T=3027(0.01C)
+SF #4281 t=89692ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-28,1004)mg g=(0,-1,2)x0.1dps T=29C | IMU1 a=(-12,10,1020)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89573Pa T=2833(0.01C) | BARO1 p=90340Pa T=3023(0.01C)
+SF #4294 t=89950ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-30,1000)mg g=(1,0,1)x0.1dps T=28C | IMU1 a=(-17,14,1022)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89565Pa T=2830(0.01C) | BARO1 p=90302Pa T=3019(0.01C)
+SF #4307 t=90212ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(2,-30,999)mg g=(2,1,1)x0.1dps T=29C | IMU1 a=(-14,14,1015)mg g=(1,-1,0)x0.1dps T=28C
+  BARO0 p=89591Pa T=2829(0.01C) | BARO1 p=90329Pa T=3029(0.01C)
+SF #4320 t=90478ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(7,-32,1001)mg g=(0,-1,2)x0.1dps T=29C | IMU1 a=(-14,13,1016)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89564Pa T=2827(0.01C) | BARO1 p=90356Pa T=3032(0.01C)
+SF #4333 t=90731ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(-1,-28,1000)mg g=(1,-1,1)x0.1dps T=28C | IMU1 a=(-10,11,1020)mg g=(0,1,0)x0.1dps T=28C
+  BARO0 p=89594Pa T=2829(0.01C) | BARO1 p=90384Pa T=3025(0.01C)
+SF #4346 t=90991ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-31,998)mg g=(1,0,0)x0.1dps T=29C | IMU1 a=(-17,13,1021)mg g=(0,0,0)x0.1dps T=28C
+  BARO0 p=89589Pa T=2832(0.01C) | BARO1 p=90430Pa T=3029(0.01C)
+SF #4359 t=91252ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-30,1002)mg g=(1,-1,1)x0.1dps T=29C | IMU1 a=(-20,10,1019)mg g=(0,2,0)x0.1dps T=28C
+  BARO0 p=89589Pa T=2826(0.01C) | BARO1 p=90449Pa T=3023(0.01C)
+SF #4372 t=91510ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-33,999)mg g=(0,-1,1)x0.1dps T=29C | IMU1 a=(-16,8,1015)mg g=(-1,1,1)x0.1dps T=28C
+  BARO0 p=89585Pa T=2832(0.01C) | BARO1 p=90494Pa T=3023(0.01C)
+SF #4385 t=91773ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-29,999)mg g=(1,1,1)x0.1dps T=29C | IMU1 a=(-13,11,1018)mg g=(1,0,0)x0.1dps T=28C
+  BARO0 p=89611Pa T=2833(0.01C) | BARO1 p=90579Pa T=3028(0.01C)
+SF #4398 t=92027ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(3,-31,988)mg g=(-4,-5,0)x0.1dps T=29C | IMU1 a=(-18,14,1011)mg g=(2,-1,0)x0.1dps T=28C
+  BARO0 p=89585Pa T=2830(0.01C) | BARO1 p=90615Pa T=3028(0.01C)
+SF #4410 t=92279ms drop=0 mag=(0,0,0)mG
+  IMU0 a=(5,-30,999)mg g=(3,1,2)xAPF_RawStream
+0.1dps T=29C | IMU1 a=(-14,15,1013)mg g=(2,-1,0)x0.1dps T=28C
+  BARO0 p=89573Pa T=2831(0.01C) | BARO1 p=90582Pa T=3031(0.01C)
+SensorFrame raw print OFF
+Log was unsuccessful
+Log was unsuccessful
+Log was unsuccessful

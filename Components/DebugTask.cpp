@@ -15,6 +15,7 @@
 #include "FlashTask.hpp"
 #include "PollingTask.hpp"
 #include "FlightTask.hpp"
+#include "SensorFrameTask.hpp"
 
 // External Tasks (to send debug commands to)
 
@@ -167,6 +168,13 @@ void DebugTask::HandleDebugMessage(const char *msg)
   else if (strcmp(msg, "flight_test") == 0){
   	  Command cmd(TASK_SPECIFIC_COMMAND, FlightTask::TOGGLE_TEST_MODE);
   	  FlightTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strncmp(msg, "APF_", 4) == 0)
+  {
+    // Altitude prediction filter debug commands, handled by the SensorFrameTask
+    if (!SensorFrameTask::HandleApfCommand(msg)) {
+      SOAR_PRINT("Debug, unknown APF command: %s (try APF_Help)\n", msg);
+    }
   }
 
 #if (configGENERATE_RUN_TIME_STATS == 1)  // enable profiling commands if profiling enabled

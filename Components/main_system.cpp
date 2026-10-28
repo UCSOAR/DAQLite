@@ -17,6 +17,7 @@
 #include "FlashTask.hpp"
 #include "PollingTask.hpp"
 #include "FlightTask.hpp"
+#include "SensorFrameTask.hpp"
 
 
 /* Drivers ------------------------------------------------------------------*/
@@ -36,6 +37,7 @@ void run_main() {
 	DebugTask::Inst().InitTask();
     LoggingTask::Inst().InitTask();
     PollingTask::Inst().InitTask();
+    SensorFrameTask::Inst().InitTask();
     FlightTask::Inst().InitTask();
     FlashTask::Inst().InitTask();
 

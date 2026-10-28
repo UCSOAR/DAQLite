@@ -26,6 +26,7 @@
 #include "DataBroker.hpp"
 #include "Task.hpp"
 #include "DebugTask.hpp"
+#include "../../AltitudePredictionFilter/Output/Inc/FilterLog.hpp"
 
 /************************************
  * PRIVATE MACROS AND DEFINES
@@ -86,6 +87,7 @@ void LoggingTask::InitTask()
 	DataBroker::Subscribe<BaroData>(this);
 	DataBroker::Subscribe<MagData>(this);
 	DataBroker::Subscribe<GPSData>(this);
+	DataBroker::Subscribe<FilterData>(this);
 
 }
 
@@ -282,6 +284,21 @@ void LoggingTask::HandleCommand(Command& cm){
 
 		break;
 	}
+
+	case DataBrokerMessageTypes::FILTER_DATA:
+	{
+		// Altitude prediction filter output, packed into one 20 byte slot (layout in FilterLog.hpp)
+		FilterData data = DataBroker::ExtractData<FilterData>(cm);
+
+		buf[0] = static_cast<uint8_t>(LoggingData::FILTER);
+		memcpy(buf + 1, &data.timestampMs, sizeof(data.timestampMs));	// filter frame time, 4 bytes
+		FilterLog::Pack(data, buf + 5);									// 15 bytes
+
+		LoggingService log(LoggingDest::FLASH_EXTERN, LoggingData::FILTER, buf, 20, LoggingPriority::SECOND);
+		err = log.LogData();
+		break;
+	}
+
 	case DataBrokerMessageTypes :: INVALID:
 	{
 		cm.Reset();

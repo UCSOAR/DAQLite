@@ -511,6 +511,24 @@ void LoggingService::ProcessFlashDump()
 							   gpsSentence);
 				}
 			}
+			//parse altitude prediction filter output and print (layout: AltitudePredictionFilter/Output/Inc/FilterLog.hpp)
+			else if (type == LoggingData::FILTER)
+			{
+				int32_t altCm;
+				int16_t velDms, accCms2;
+				uint16_t sdCm, apogeeM;
+				int8_t eventS;
+				memcpy(&altCm, sectorBuf + i + 5, 4);
+				memcpy(&velDms, sectorBuf + i + 9, 2);
+				memcpy(&accCms2, sectorBuf + i + 11, 2);
+				memcpy(&sdCm, sectorBuf + i + 13, 2);
+				memcpy(&apogeeM, sectorBuf + i + 15, 2);
+				memcpy(&eventS, sectorBuf + i + 17, 1);
+
+				SOAR_PRINT("FILTER Timestamp=%lu AltCm=%ld VelDms=%d AccCms2=%d SdCm=%u ApogeeM=%u EventS=%d State=%u Flags=%u\n",
+						   (unsigned long)timestamp, (long)altCm, (int)velDms, (int)accCms2, (unsigned int)sdCm,
+						   (unsigned int)apogeeM, (int)eventS, (unsigned int)sectorBuf[i + 18], (unsigned int)sectorBuf[i + 19]);
+			}
 
 		}
 		/*the dump offset at this point should be 3500, this means sector is full

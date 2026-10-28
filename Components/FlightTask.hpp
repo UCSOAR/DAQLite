@@ -29,6 +29,10 @@ class FlightTask: public Task
 
 		void InitTask();
 
+		// Read by other tasks (SensorFrameTask: pad = GROUND before any flight, landed = GROUND after one)
+		FlightState GetFlightState() const { return flightState; }
+		bool HasFlown() const { return hasFlown; }
+
 	protected:
 		static void RunTask(void* pvParams) { FlightTask::Inst().Run(pvParams); } // Static Task Interface, passes control to the instance Run();
 		void Run(void * pvParams); // Main run code
@@ -50,6 +54,8 @@ class FlightTask: public Task
 		static constexpr uint32_t TEST_PRINT_PERIOD_MS = 1000;
 
 		FlightStateMachine stateMachine;
+		volatile FlightState flightState = FlightState::GROUND;	// copy of stateMachine's state for other tasks
+		volatile bool hasFlown = false;							// set on the first GROUND -> FLIGHT, never cleared
 		bool testMode = false;
 		uint32_t lastTestPrintMs = 0;
 };
