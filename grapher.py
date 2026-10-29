@@ -45,8 +45,8 @@ baro_pattern = re.compile(
 )
 
 filter_pattern = re.compile(
-    r"FILTER\s+Timestamp=(\d+)\s+AltCm=(-?\d+)\s+VelDms=(-?\d+)\s+AccCms2=(-?\d+)\s+"
-    r"SdCm=(\d+)\s+ApogeeM=(\d+)\s+EventS=(-?\d+)\s+State=(\d+)\s+Flags=(\d+)"
+    r"FILTER\s+Timestamp=(\d+)\s+AltCm=(-?\d+)\s+VelCms=(-?\d+)\s+AccCms2=(-?\d+)\s+"
+    r"SdCm=(\d+)\s+ApogeeM=(\d+)\s+EventDs=(-?\d+)\s+State=(\d+)\s+Flags=(\d+)"
 )
 
 # ---------- Parse ----------
@@ -100,7 +100,7 @@ for line in lines:
     if filter_match:
         filter_time.append(int(filter_match.group(1)))
         filter_alt.append(int(filter_match.group(2)) / 100.0)
-        filter_vel.append(int(filter_match.group(3)) / 10.0)
+        filter_vel.append(int(filter_match.group(3)) / 100.0)
         filter_apogee.append(int(filter_match.group(6)))
         filter_state.append(int(filter_match.group(8)))
 

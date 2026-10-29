@@ -16,6 +16,8 @@
 #include "PollingTask.hpp"
 #include "FlightTask.hpp"
 #include "SensorFrameTask.hpp"
+#include "cmsis_os.h"
+
 
 // External Tasks (to send debug commands to)
 
@@ -88,6 +90,14 @@ void DebugTask::Run(void *pvParams)
   }
 }
 
+namespace
+{
+	// flight_reset arms, confirm_reset within 10 s does it
+	constexpr uint32_t CONFIRM_WINDOW_MS = 10000;
+	uint32_t flightResetArmedMs = 0;
+	bool flightResetArmed = false;
+}
+
 /**
  * @brief Handles debug messages, assumes msg is null terminated
  * @param msg Message to read, must be null termianted
@@ -124,6 +134,35 @@ void DebugTask::HandleDebugMessage(const char *msg)
   {
     Command cmd(TASK_SPECIFIC_COMMAND, FLASH_CLEAR);
     FlashTask::Inst().GetEventQueue()->Send(cmd);
+  }
+  else if (strcmp(msg, "flight_reset") == 0)
+  {
+    // The only way out of the filter's saved FLIGHT / LANDED state: back to the pad and reboot
+    flightResetArmed = true;
+    flightResetArmedMs = TICKS_TO_MS(xTaskGetTickCount());
+    SOAR_PRINT("flight_reset: filter back to PAD (re-tare) and reboot. Send confirm_reset within 10 s\n");
+  }
+  else if (strcmp(msg, "confirm_reset") == 0)
+  {
+    const bool armed = flightResetArmed && (TICKS_TO_MS(xTaskGetTickCount()) - flightResetArmedMs) <= CONFIRM_WINDOW_MS;
+    flightResetArmed = false;
+    if (!armed) {
+      SOAR_PRINT("confirm_reset: send flight_reset first (10 s window)\n");
+    } else {
+      FilterLog::PersistedState state{};
+      LoggingService::LoadFlightState(state);		// keeps the boot count
+      const uint32_t boots = state.bootCount;
+      state = FilterLog::PersistedState{};
+      state.bootCount = boots;
+      state.phase = FilterLog::PHASE_PAD;
+      if (LoggingService::SaveFlightStateNow(state)) {
+        SOAR_PRINT("flight_reset: saved PAD, rebooting\n");
+        osDelay(50);
+        HAL_NVIC_SystemReset();
+      } else {
+        SOAR_PRINT("flight_reset FAILED: flash not ready or write failed, state unchanged\n");
+      }
+    }
   }
   else if (strcmp(msg, "stop_dump") == 0)
   {

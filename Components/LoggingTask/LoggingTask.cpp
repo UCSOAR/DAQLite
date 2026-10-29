@@ -52,6 +52,10 @@ bool firstAltCaptured = false;
 bool launched = false;
 bool landed = false;
 
+static uint32_t lastFilter2Ms = 0;		//FILTER2 (filter diagnostics) is logged at 1 Hz
+constexpr uint32_t FILTER2_PERIOD_MS = 1000;
+
+
 
 
 /************************************
@@ -113,6 +117,10 @@ void LoggingTask::HandleCommand(Command& cm){
 	if(cm.GetCommand() != DATA_BROKER_COMMAND){
 		return;
 	}
+
+	// Filter state saves for a power loss (written here so the filter task never waits on a flash erase)
+	LoggingService::ServiceFlightState();
+
 
 	LoggingStatus err = LoggingStatus::LOGGING_SUCCESS;
 	DataBrokerMessageTypes messageType = DataBroker::getMessageType(cm);
@@ -296,6 +304,27 @@ void LoggingTask::HandleCommand(Command& cm){
 
 		LoggingService log(LoggingDest::FLASH_EXTERN, LoggingData::FILTER, buf, 20, LoggingPriority::SECOND);
 		err = log.LogData();
+
+		// Flight event of this publish (launch, apogee, landed, ...)
+		if (data.event != FilterLog::EVENT_NONE)
+		{
+			buf[0] = static_cast<uint8_t>(LoggingData::EVENT);
+			memcpy(buf + 1, &data.timestampMs, sizeof(data.timestampMs));
+			FilterLog::PackEvent(data, buf + 5);
+			LoggingService eventLog(LoggingDest::FLASH_EXTERN, LoggingData::EVENT, buf, 20, LoggingPriority::SECOND);
+			eventLog.LogData();
+		}
+
+		// Diagnostics, 1 Hz
+		if ((data.timestampMs - lastFilter2Ms) >= FILTER2_PERIOD_MS)
+		{
+			lastFilter2Ms = data.timestampMs;
+			buf[0] = static_cast<uint8_t>(LoggingData::FILTER2);
+			memcpy(buf + 1, &data.timestampMs, sizeof(data.timestampMs));
+			FilterLog::PackDiagnostics(data, buf + 5);
+			LoggingService diagLog(LoggingDest::FLASH_EXTERN, LoggingData::FILTER2, buf, 20, LoggingPriority::SECOND);
+			diagLog.LogData();
+		}
 		break;
 	}
 

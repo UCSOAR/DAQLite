@@ -19,7 +19,9 @@ class FlightTask: public Task
 
 		enum FlightTaskCommands : uint16_t {
 			PRINT_STATE = 1,
-			TOGGLE_TEST_MODE = 2
+			TOGGLE_TEST_MODE = 2,
+			RESTORE_FLIGHT = 3,		// power loss: boot straight into FLIGHT (SensorFrameTask, saved filter state)
+			RESTORE_LANDED = 4		// power loss: boot straight into GROUND after a flight
 		};
 
 		static FlightTask& Inst() {

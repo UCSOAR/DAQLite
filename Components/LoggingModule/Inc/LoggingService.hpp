@@ -14,6 +14,8 @@
 #include "DataBroker.hpp"
 #include "Command.hpp"
 #include "mx66xx_qspi.hpp"
+#include "../../../AltitudePredictionFilter/Output/Inc/FilterLog.hpp"
+
 //#include "MX66L1G45GMI.hpp"
 
 #define MAX_LOG_SIZE 20 //bytes, minus one byte for priority
@@ -31,6 +33,15 @@ class LoggingService{
 		static void StopDump();
 		static void StopLogging();
 		static void StartLogging();
+
+		// Altitude prediction filter state for a power loss: its own sector, not touched by the log
+		// cursor or flash_clear. Load reads it directly (boot). Saves are copied and written by the
+		// LoggingTask (ServiceFlightState) so the filter task never waits on a flash erase
+		static bool LoadFlightState(FilterLog::PersistedState& state);
+		static void RequestFlightStateSave(const FilterLog::PersistedState& state);
+		static void ServiceFlightState();
+		static bool SaveFlightStateNow(const FilterLog::PersistedState& state);	// direct (flight_reset)
+
 	private:
 		LoggingStatus LogToMX66();
 		LoggingStatus LogToInternalMemory();

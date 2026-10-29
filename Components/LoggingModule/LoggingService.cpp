@@ -27,7 +27,9 @@ namespace
 {
 	constexpr uint16_t FLASH_STATE_SECTOR = NUM_SECTORS - 1;		//Reserves the last sector of flash chip for saving logger state
 	constexpr uint16_t FLASH_TEST_SECTOR = NUM_SECTORS - 2;			//Reserves the second-last sector for testing
-	constexpr uint16_t FLASH_DATA_LIMIT_SECTOR = FLASH_TEST_SECTOR;	//The sector limit at which data can be written to in flash
+	constexpr uint16_t FLIGHT_STATE_SECTOR = NUM_SECTORS - 3;		//Reserves the third-last sector for the filter's flight state (power loss)
+	constexpr uint16_t FLASH_DATA_LIMIT_SECTOR = FLIGHT_STATE_SECTOR;	//The sector limit at which data can be written to in flash
+
 	constexpr uint32_t FLASH_STATE_MAGIC = 0x4C4F4731;				//Recognizable constant to check if saved flash state is valid
 
 	//16 byte flash state record for saving flash state between program runs
@@ -115,9 +117,160 @@ namespace
 				return false;
 			}
 		}
-
 		return true;
 	}
+
+	//CRC32 (reflected, 0xEDB88320), used for the flight state records
+	static uint32_t Crc32(const uint8_t* data, uint32_t n)
+	{
+		uint32_t crc = 0xFFFFFFFFU;
+		for (uint32_t i = 0; i < n; ++i)
+		{
+			crc ^= data[i];
+			for (uint8_t b = 0; b < 8; ++b)
+			{
+				crc = (crc & 1U) ? ((crc >> 1) ^ 0xEDB88320U) : (crc >> 1);
+			}
+		}
+		return ~crc;
+	}
+
+	/* Flight state sector (altitude prediction filter): same append-only scheme as the logger cursor,
+	 * 256 byte records. The newest valid record is the state, a reset mid-save loses at most that record
+	 */
+	constexpr uint32_t FLIGHT_STATE_MAGIC = 0x46535431;			//"FST1"
+	constexpr uint32_t FLIGHT_STATE_SLOT_BYTES = 256;
+	constexpr uint32_t FLIGHT_STATE_SLOTS = FS_SECTOR_SIZE / FLIGHT_STATE_SLOT_BYTES;
+	struct FlightStateSlot
+	{
+		uint32_t magic;
+		uint32_t sequence;
+		FilterLog::PersistedState state;
+		uint32_t crc;					//CRC32 of everything before it
+	};
+	static_assert(sizeof(FlightStateSlot) <= FLIGHT_STATE_SLOT_BYTES, "flight state record too big for its slot");
+
+	static uint8_t flightSlotBuf[FLIGHT_STATE_SLOT_BYTES];
+	static uint32_t flightSlot = 0;				//next empty slot
+	static bool flightSlotKnown = false;
+	static uint32_t flightSequence = 0;
+	static FilterLog::PersistedState pendingFlightState{};
+	static volatile bool flightSavePending = false;
+
+	static bool IsValidFlightSlot(const FlightStateSlot& s)
+	{
+		return (s.magic == FLIGHT_STATE_MAGIC)
+			&& (s.crc == Crc32(reinterpret_cast<const uint8_t*>(&s), offsetof(FlightStateSlot, crc)));
+	}
+
+	//finds the newest valid flight state, sets flightSlot to the first empty slot
+	static bool ReadFlightState(FilterLog::PersistedState& state)
+	{
+		bool found = false;
+		flightSlot = FLIGHT_STATE_SLOTS;
+		flightSlotKnown = true;
+		for (uint32_t i = 0; i < FLIGHT_STATE_SLOTS; ++i)
+		{
+			MX66xxQSPI_ReadSector(flightSlotBuf, FLIGHT_STATE_SECTOR, i * FLIGHT_STATE_SLOT_BYTES, FLIGHT_STATE_SLOT_BYTES);
+			FlightStateSlot s;
+			memcpy(&s, flightSlotBuf, sizeof(s));
+			if (s.magic == 0xFFFFFFFFU)
+			{
+				flightSlot = i;
+				break;
+			}
+			if (IsValidFlightSlot(s) && (!found || s.sequence >= flightSequence))
+			{
+				state = s.state;
+				flightSequence = s.sequence;
+				found = true;
+			}
+		}
+		return found;
+	}
+
+	//appends one record, erases the sector first when it is full. Call with flashLock held
+	static bool WriteFlightState(const FilterLog::PersistedState& state)
+	{
+		if (!flightSlotKnown)
+		{
+			FilterLog::PersistedState unused{};
+			ReadFlightState(unused);
+		}
+		if (flightSlot >= FLIGHT_STATE_SLOTS)
+		{
+			MX66xxQSPI_EraseSector(FLIGHT_STATE_SECTOR);
+			flightSlot = 0;
+		}
+		FlightStateSlot s{};
+		s.magic = FLIGHT_STATE_MAGIC;
+		s.sequence = ++flightSequence;
+		s.state = state;
+		s.crc = Crc32(reinterpret_cast<const uint8_t*>(&s), offsetof(FlightStateSlot, crc));
+		memset(flightSlotBuf, 0, sizeof(flightSlotBuf));
+		memcpy(flightSlotBuf, &s, sizeof(s));
+		const uint32_t offset = flightSlot * FLIGHT_STATE_SLOT_BYTES;
+		MX66xxQSPI_WriteSector(flightSlotBuf, FLIGHT_STATE_SECTOR, offset, FLIGHT_STATE_SLOT_BYTES);
+		flightSlot++;
+		//read back so a failed save is reported now, not after the next power loss
+		FlightStateSlot check;
+		MX66xxQSPI_ReadSector(flightSlotBuf, FLIGHT_STATE_SECTOR, offset, FLIGHT_STATE_SLOT_BYTES);
+		memcpy(&check, flightSlotBuf, sizeof(check));
+		if (!IsValidFlightSlot(check) || check.sequence != s.sequence)
+		{
+			SOAR_PRINT("LoggingService: flight state save FAILED (slot %lu)\n", (unsigned long)(flightSlot - 1));
+			return false;
+		}
+		return true;
+	}
+}
+
+bool LoggingService::LoadFlightState(FilterLog::PersistedState& state)
+{
+	if (!FlashTask::Inst().IsFlashInitialized())
+	{
+		return false;
+	}
+	flashLock.Lock();
+	const bool found = ReadFlightState(state);
+	flashLock.Unlock();
+	return found;
+}
+
+void LoggingService::RequestFlightStateSave(const FilterLog::PersistedState& state)
+{
+	taskENTER_CRITICAL();
+	pendingFlightState = state;
+	flightSavePending = true;
+	taskEXIT_CRITICAL();
+}
+
+void LoggingService::ServiceFlightState()
+{
+	if (!flightSavePending || !FlashTask::Inst().IsFlashInitialized())
+	{
+		return;
+	}
+	FilterLog::PersistedState state;
+	taskENTER_CRITICAL();
+	state = pendingFlightState;
+	flightSavePending = false;
+	taskEXIT_CRITICAL();
+	flashLock.Lock();
+	WriteFlightState(state);
+	flashLock.Unlock();
+}
+
+bool LoggingService::SaveFlightStateNow(const FilterLog::PersistedState& state)
+{
+	if (!FlashTask::Inst().IsFlashInitialized())
+	{
+		return false;
+	}
+	flashLock.Lock();
+	const bool ok = WriteFlightState(state);
+	flashLock.Unlock();
+	return ok;
 }
 
 //Constructor for logging service
@@ -357,6 +510,9 @@ const char* SensorTypeName(LoggingData type)
         case LoggingData::BARO11: return "BARO11";
         case LoggingData::GPS:    return "GPS";
         case LoggingData::FILTER: return "FILTER";
+        case LoggingData::FILTER2: return "FILTER2";
+        case LoggingData::EVENT:  return "EVENT";
+
         default: return "UNKNOWN";
     }
 }
@@ -514,20 +670,34 @@ void LoggingService::ProcessFlashDump()
 			//parse altitude prediction filter output and print (layout: AltitudePredictionFilter/Output/Inc/FilterLog.hpp)
 			else if (type == LoggingData::FILTER)
 			{
-				int32_t altCm;
-				int16_t velDms, accCms2;
-				uint16_t sdCm, apogeeM;
-				int8_t eventS;
-				memcpy(&altCm, sectorBuf + i + 5, 4);
-				memcpy(&velDms, sectorBuf + i + 9, 2);
-				memcpy(&accCms2, sectorBuf + i + 11, 2);
-				memcpy(&sdCm, sectorBuf + i + 13, 2);
-				memcpy(&apogeeM, sectorBuf + i + 15, 2);
-				memcpy(&eventS, sectorBuf + i + 17, 1);
-
-				SOAR_PRINT("FILTER Timestamp=%lu AltCm=%ld VelDms=%d AccCms2=%d SdCm=%u ApogeeM=%u EventS=%d State=%u Flags=%u\n",
-						   (unsigned long)timestamp, (long)altCm, (int)velDms, (int)accCms2, (unsigned int)sdCm,
-						   (unsigned int)apogeeM, (int)eventS, (unsigned int)sectorBuf[i + 18], (unsigned int)sectorBuf[i + 19]);
+				const FilterData d = FilterLog::Unpack(sectorBuf + i + 5, timestamp);
+				SOAR_PRINT("FILTER Timestamp=%lu AltCm=%ld VelCms=%ld AccCms2=%ld SdCm=%ld ApogeeM=%ld EventDs=%ld State=%u Flags=%u\n",
+						   (unsigned long)timestamp, (long)FilterLog::Round(d.altitude * 100.0f),
+						   (long)FilterLog::Round(d.velocity * 100.0f), (long)FilterLog::Round(d.acceleration * 100.0f),
+						   (long)FilterLog::Round(d.altitudeStd * 100.0f), (long)FilterLog::Round(d.predictedApogee),
+						   (long)FilterLog::Round(d.timeToEvent * 10.0f), (unsigned int)d.apfState, (unsigned int)d.flags);
+			}
+			//filter diagnostics (layout: AltitudePredictionFilter/Output/Inc/FilterLog.hpp)
+			else if (type == LoggingData::FILTER2)
+			{
+				const uint8_t* p = sectorBuf + i + 5;
+				uint16_t velSd, sigma;
+				int16_t inn;
+				memcpy(&velSd, p + 0, 2);
+				memcpy(&inn, p + 5, 2);
+				memcpy(&sigma, p + 12, 2);
+				SOAR_PRINT("FILTER2 Timestamp=%lu VelSdCms=%u CaseA=%d CaseB=%d WeightA=%u InnovCm=%d KAlt=%u KVel=%u KAcc=%u Baro0W=%u Baro1W=%u SigmaCm=%u\n",
+						   (unsigned long)timestamp, (unsigned int)velSd, (int)(int8_t)p[2], (int)(int8_t)p[3],
+						   (unsigned int)p[4], (int)inn, (unsigned int)p[7], (unsigned int)p[8], (unsigned int)p[9],
+						   (unsigned int)p[10], (unsigned int)p[11], (unsigned int)sigma);
+			}
+			//filter flight event
+			else if (type == LoggingData::EVENT)
+			{
+				int32_t value;
+				memcpy(&value, sectorBuf + i + 6, sizeof(value));
+				SOAR_PRINT("EVENT Timestamp=%lu Code=%u Value=%ld State=%u\n",
+						   (unsigned long)timestamp, (unsigned int)sectorBuf[i + 5], (long)value, (unsigned int)sectorBuf[i + 10]);
 			}
 
 		}

@@ -110,6 +110,18 @@ void FlightTask::HandleTaskCommand(uint16_t taskCommand){
 	case PRINT_STATE:
 		PrintState(NowMs());
 		break;
+	case RESTORE_FLIGHT:
+	case RESTORE_LANDED:
+	{
+		const bool inFlight = (taskCommand == RESTORE_FLIGHT);
+		stateMachine.Restore(inFlight ? FlightState::FLIGHT : FlightState::GROUND, NowMs());
+		hasFlown = true;
+		flightState = stateMachine.GetState();
+		Command rateCmd(DATA_COMMAND, inFlight ? PollingTask::SET_FLIGHT_RATE : PollingTask::SET_GROUND_RATE);
+		PollingTask::Inst().GetEventQueue()->Send(rateCmd);
+		SOAR_PRINT("FLIGHT: restored %s after a power loss\n", inFlight ? "FLIGHT" : "GROUND (landed)");
+		break;
+	}
 	case TOGGLE_TEST_MODE:
 		testMode = !testMode;
 		stateMachine.SetThresholds(testMode ? FlightThresholds::BenchTest() : FlightThresholds::Normal());

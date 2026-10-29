@@ -43,6 +43,9 @@ public:
 	bool OnBaro(uint8_t baroId, uint32_t pressurePa, uint32_t nowMs);
 
 	FlightState GetState() const { return state_; }
+
+	// Altitude prediction filter power loss recovery: start straight in a saved state
+	void Restore(FlightState s, uint32_t nowMs) { EnterState(s, nowMs); }
 	uint32_t GetStateEnteredMs() const { return stateEnteredMs_; }
 	uint32_t GetLastAccelMg() const { return lastAccelMg_; }
 	bool HasAltitude() const;

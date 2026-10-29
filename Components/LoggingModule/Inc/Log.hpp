@@ -41,7 +41,10 @@ enum class LoggingData
 	BARO07,
 	BARO11,
 	GPS,
-	FILTER
+	FILTER,		// altitude prediction filter output (AltitudePredictionFilter/Output/Inc/FilterLog.hpp)
+	FILTER2,	// filter diagnostics, 1 Hz
+	EVENT		// filter flight event (FilterLog::Event)
+
 
 };
 
