@@ -35,6 +35,7 @@
 #define MX66XX_CMD_WREN 0x06
 #define MX66XX_CMD_WRDI 0x04
 #define MX66XX_CMD_RDSR 0x05
+#define MX66XX_CMD_RDSCUR 0x2B
 #define MX66XX_CMD_WRSR 0x01
 #define MX66XX_CMD_CE 0xC7
 #define MX66XX_CMD_SE 0x20
@@ -361,6 +362,20 @@ void MX66xxQSPI_WriteDisable(void)
     MX66xxQSPI_Delay(1);
 }
 
+// Security register holds P_FAIL / E_FAIL, set by the chip when the last program / erase failed
+uint8_t MX66xxQSPI_ReadSecurityRegister(void)
+{
+    uint8_t scur = 0;
+    (void)MX66xxQSPI_CommandReceive(MX66XX_CMD_RDSCUR,
+                                    0,
+                                    QSPI_ADDRESS_NONE,
+                                    QSPI_DATA_4_LINES,
+                                    &scur,
+                                    1,
+                                    0);
+    return scur;
+}
+
 uint8_t MX66xxQSPI_ReadStatusRegister(void)
 {
     uint8_t status = mx66xx_qspi.StatusRegister1;
@@ -490,6 +505,9 @@ void MX66xxQSPI_EraseSector(uint32_t SectorIndex)
 
     if (!MX66xxQSPI_PrepareWrite())
     {
+        SOAR_PRINT("MX66xxQSPI_EraseSector() write enable failed: sector=%lu sr1=0x%02X\n",
+                   (unsigned long)SectorIndex,
+                   (unsigned int)mx66xx_qspi.StatusRegister1);
         mx66xx_qspi.Lock = 0;
         return;
     }
@@ -735,6 +753,13 @@ void MX66xxQSPI_WritePage(uint8_t *pBuffer, uint32_t Page_Address, uint32_t Offs
                        (unsigned long)NumByteToWrite_up_to_PageSize,
                        (unsigned int)MX66xxQSPI_ReadStatusRegister());
         }
+    }
+    else
+    {
+        SOAR_PRINT("MX66xxQSPI_WritePage() write enable failed: page=%lu addr=0x%08lX sr1=0x%02X\n",
+                   (unsigned long)Page_Address,
+                   (unsigned long)addr,
+                   (unsigned int)mx66xx_qspi.StatusRegister1);
     }
 
     mx66xx_qspi.Lock = 0;

@@ -47,6 +47,7 @@ class FlightTask: public Task
 		static uint32_t NowMs();
 
 		static constexpr uint8_t IMU32A_ID = 1;					// only imu32a is used for flight detection
+		static constexpr uint8_t BARO07_ID = 0;					// only baro07 is used, baro11 drifts ~1000 Pa on a still board
 		static constexpr uint32_t TEST_PRINT_PERIOD_MS = 1000;
 
 		FlightStateMachine stateMachine;

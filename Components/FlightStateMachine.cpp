@@ -17,7 +17,7 @@ FlightThresholds FlightThresholds::Normal()
 	t.backupAltWindowMs = 500;
 	t.minFlightMs = 30000;
 	t.stillWindowMs = 10000;
-	t.stillAltBandM = 3.0f;
+	t.stillAltBandM = 10.0f;	// baro noise is a few m per sample, so allow 20 m spread over the window
 	t.stillAccelTolMg = 200;
 	t.baroAvgWindowMs = 500;
 	t.padSettleMs = 5000;

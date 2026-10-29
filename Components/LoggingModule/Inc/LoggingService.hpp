@@ -40,6 +40,7 @@ class LoggingService{
 		static void SaveFlashState();
 		static void AdvanceSlot();
 		static void SkipUsedSlots();
+		static void PrintFlashFailDetails(uint32_t badBytes, uint32_t totalBytes, uint32_t firstBad, uint8_t expected, uint8_t got);
 
 		LoggingPacket loggingData;
 
