@@ -2,7 +2,7 @@ import re
 import matplotlib.pyplot as plt
 
 # ---------- Load File ----------
-with open("flash_dump.txt", "r", encoding="utf-8", errors="ignore") as f:
+with open("grapher_test.txt", "r", encoding="utf-8", errors="ignore") as f:
     lines = f.readlines()
 
 # ---------- Storage ----------
@@ -29,30 +29,35 @@ baro11_time = []
 baro11_pressure = []
 
 # ---------- Regex ----------
-imu_pattern = re.compile(
-    r"(IMU\d+G)\(ID=\d+\) Timestamp=(\d+).*Accel=\[(-?\d+),(-?\d+),(-?\d+)\].*Gyro=\[(-?\d+),(-?\d+),(-?\d+)\]"
-)
+# Minimal dump format: type[data] timestamp
+# type ids match LoggingData in Log.hpp: 0=IMU32G 1=IMU16G 2=MAG 3=BARO07 4=BARO11 5=GPS
+IMU32G, IMU16G, MAG, BARO07, BARO11, GPS = range(6)
 
-baro_pattern = re.compile(
-    r"(BARO\d+)\(ID=\d+\) Timestamp=(\d+) Pressure=(-?\d+)"
-)
+record_pattern = re.compile(r"\b(\d+)\[([^\]]*)\]\s*(\d+)")
 
 # ---------- Parse ----------
 for line in lines:
-    imu_match = imu_pattern.search(line)
-    if imu_match:
-        sensor = imu_match.group(1)
-        ts = int(imu_match.group(2))
+    match = record_pattern.search(line)
+    if not match:
+        continue
 
-        ax = int(imu_match.group(3))
-        ay = int(imu_match.group(4))
-        az = int(imu_match.group(5))
+    sensor = int(match.group(1))
+    ts = int(match.group(3))
 
-        gx = int(imu_match.group(6))
-        gy = int(imu_match.group(7))
-        gz = int(imu_match.group(8))
+    # GPS data is a sentence, not numbers
+    if sensor == GPS:
+        continue
 
-        if sensor == "IMU16G":
+    try:
+        values = [int(v) for v in match.group(2).split(",")]
+    except ValueError:
+        continue
+
+    # IMU data: ax,ay,az,gx,gy,gz,temp
+    if sensor in (IMU16G, IMU32G) and len(values) >= 6:
+        ax, ay, az, gx, gy, gz = values[:6]
+
+        if sensor == IMU16G:
             imu16_time.append(ts)
             imu16_ax.append(ax)
             imu16_ay.append(ay)
@@ -61,7 +66,7 @@ for line in lines:
             imu16_gy.append(gy)
             imu16_gz.append(gz)
 
-        elif sensor == "IMU32G":
+        else:
             imu32_time.append(ts)
             imu32_ax.append(ax)
             imu32_ay.append(ay)
@@ -70,17 +75,15 @@ for line in lines:
             imu32_gy.append(gy)
             imu32_gz.append(gz)
 
-    baro_match = baro_pattern.search(line)
-    if baro_match:
-        sensor = baro_match.group(1)
-        ts = int(baro_match.group(2))
-        pressure = int(baro_match.group(3))
+    # Baro data: pressure,temp
+    elif sensor in (BARO07, BARO11) and len(values) >= 1:
+        pressure = values[0]
 
-        if sensor == "BARO07":
+        if sensor == BARO07:
             baro07_time.append(ts)
             baro07_pressure.append(pressure)
 
-        elif sensor == "BARO11":
+        else:
             baro11_time.append(ts)
             baro11_pressure.append(pressure)
 
