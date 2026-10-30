@@ -13,7 +13,6 @@
 #include "lsm6dso.hpp"
 #include <LSM6DO32Driver.h>
 #include "mmc5983ma.hpp"
-#include "NEO-M9N-00BDriver.hpp"
 #include "SensorDataTypes.hpp"
 #include "main.h"
 
@@ -33,14 +32,12 @@ class PollingTask: public Task
 
 		enum PollingTaskCommands : uint16_t {
 			POLL_SENSORS_AND_LOG = 1,
-			GPS_TEST,
 			IMU32_A_TEST,
 			IMU32_B_TEST,
 			IMU16_TEST,
 			BARO07_TEST,
 			BARO11_TEST,
 			MAG_TEST,
-			GPS_INIT,
 			SET_GROUND_RATE,	// sent by FlightTask
 			SET_FLIGHT_RATE		// sent by FlightTask
 		};
@@ -80,7 +77,6 @@ class PollingTask: public Task
 		void SetPollPeriod(uint32_t periodMs);
 
 		volatile uint32_t lastPollDurationMs = 0;
-		bool gpsInitialized = false;
 		bool canNetworkReady = false;
 		TickType_t lastCanJoinRetryTick = 0;
 
@@ -92,7 +88,6 @@ class PollingTask: public Task
 		IMUData imu16Data;
 		MagData magData;
 		MagDriverData driverData;
-		GPSData gpsData;
 
 		//All sensor gpios and spi
 		//Baro 07 config
@@ -120,9 +115,7 @@ class PollingTask: public Task
 	    GPIO_TypeDef *MMC_CS_PORT = MAG_CS_GPIO_Port;
 	    const uint16_t MMC_CS_PIN = MAG_CS_Pin;
 
-	    //GPS config
-	    GPIO_TypeDef *GPS_CS_PORT = GPS_CS_GPIO_Port;
-	   	const uint16_t GPS_CS_PIN = GPS_CS_Pin;
+	    // GPS: GpsTask (SPI1 is shared with imu32a, BusLocks::spi1)
 
 
 	    //Drivers
@@ -132,7 +125,6 @@ class PollingTask: public Task
 	    MS5607_Driver barometer07{hspi2_, MS5607_CS_PORT, MS5607_CS_PIN};
 	    MS5611_Driver barometer11{hspi4_, MS5611_CS_PORT, MS5611_CS_PIN};
 	    MMC5983MA magnetometer;
-	    NEOM9N00B gps;
 
 };
 

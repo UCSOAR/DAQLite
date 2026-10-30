@@ -16,6 +16,7 @@
 #include "LoggingTask.hpp"
 #include "FlashTask.hpp"
 #include "PollingTask.hpp"
+#include "GpsTask.hpp"
 #include "FlightTask.hpp"
 #include "SensorFrameTask.hpp"
 
@@ -37,6 +38,7 @@ void run_main() {
 	DebugTask::Inst().InitTask();
     LoggingTask::Inst().InitTask();
     PollingTask::Inst().InitTask();
+    GpsTask::Inst().InitTask();
     SensorFrameTask::Inst().InitTask();
     FlightTask::Inst().InitTask();
     FlashTask::Inst().InitTask();

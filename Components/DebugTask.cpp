@@ -14,6 +14,7 @@
 #include "stm32h7xx_hal.h"
 #include "FlashTask.hpp"
 #include "PollingTask.hpp"
+#include "GpsTask.hpp"
 #include "FlightTask.hpp"
 #include "SensorFrameTask.hpp"
 #include "cmsis_os.h"
@@ -193,12 +194,12 @@ void DebugTask::HandleDebugMessage(const char *msg)
   	  PollingTask::Inst().GetEventQueue()->Send(cmd);
   }
   else if (strcmp(msg, "gps") == 0){
-  	  Command cmd(DATA_COMMAND, PollingTask::GPS_TEST);
-  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  	  Command cmd(TASK_SPECIFIC_COMMAND, GpsTask::GPS_TEST);
+  	  GpsTask::Inst().GetEventQueue()->Send(cmd);
   }
   else if (strcmp(msg, "gps_init") == 0){
-  	  Command cmd(DATA_COMMAND, PollingTask::GPS_INIT);
-  	  PollingTask::Inst().GetEventQueue()->Send(cmd);
+  	  Command cmd(TASK_SPECIFIC_COMMAND, GpsTask::GPS_INIT);
+  	  GpsTask::Inst().GetEventQueue()->Send(cmd);
   }
   else if (strcmp(msg, "flight_state") == 0){
   	  Command cmd(TASK_SPECIFIC_COMMAND, FlightTask::PRINT_STATE);
