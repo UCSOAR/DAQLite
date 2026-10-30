@@ -903,6 +903,14 @@ void LoggingService::ProcessFlashDump()
 }
 
 //sets done dump flag (used to stop from debug task)
+//lets other users of the flash chip (flash_test) keep log writes off the QSPI bus
+void LoggingService::LockFlash(){
+	flashLock.Lock();
+}
+void LoggingService::UnlockFlash(){
+	flashLock.Unlock();
+}
+
 void LoggingService::StopDump(){
 	doneDump = true;
 }

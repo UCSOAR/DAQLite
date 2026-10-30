@@ -15,7 +15,7 @@
 #include "LoggingService.hpp"
 
 /* Constants ------------------------------------------------------------------*/
-constexpr uint16_t FLASH_TEST_SECTOR = 32;          // TODO: Move to a reserved sector if needed
+constexpr uint16_t FLASH_TEST_SECTOR = NUM_SECTORS - 2; // reserved for tests by LoggingService, outside the logged data
 constexpr uint32_t FLASH_TEST_SIZE_BYTES = 512;    // Two pages
 constexpr uint32_t FLASH_ERASE_VERIFY_BYTES = 256; // One page
 
@@ -128,7 +128,10 @@ void FlashTask::HandleCommand(Command &cm)
             InitializeFlash();
             break;
         case EVENT_FLASH_TEST:
+            // hold the logging flash lock so log writes can't interleave with the test's QSPI commands
+            LoggingService::LockFlash();
             RunFlashTests();
+            LoggingService::UnlockFlash();
             break;
         case FLASH_DUMP:
         	dumoflash();

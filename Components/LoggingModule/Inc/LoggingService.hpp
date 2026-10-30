@@ -33,6 +33,8 @@ class LoggingService{
 		static void StopDump();
 		static void StopLogging();
 		static void StartLogging();
+		static void LockFlash();		// for other users of the flash chip (flash_test) to keep logging off the QSPI bus
+		static void UnlockFlash();
 
 		// Altitude prediction filter state for a power loss: its own sector, not touched by the log
 		// cursor or flash_clear. Load reads it directly (boot). Saves are copied and written by the
