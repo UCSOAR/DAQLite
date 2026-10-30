@@ -10,6 +10,10 @@
 #include "FlashTask.hpp"
 #include "Mutex.hpp"
 
+extern QSPI_HandleTypeDef hqspi;
+
+const char* SensorTypeName(LoggingData type);	//defined below, used in error messages
+
 uint8_t  LoggingService::ramLog[RAM_LOG_SIZE] = {0}; 	//buffer that when full logs all to flash (500 bytes)
 uint32_t LoggingService::ramHead = 0;					//the head of the buffer across all instances
 uint16_t LoggingService::sectorAddress = 0;				//the address of the sector cursor is at
@@ -68,6 +72,7 @@ namespace
 	{
 		FlashStateRecord page[STATE_RECORDS_PER_READ];
 		bool found = false;
+		uint32_t corrupt = 0;	//written slots that fail the magic / checksum check
 
 		stateSlot = STATE_RECORDS_PER_SECTOR;	//full unless an empty slot is found
 		stateSlotKnown = true;
@@ -82,6 +87,11 @@ namespace
 				if (page[i].magic == 0xFFFFFFFFU)
 				{
 					stateSlot = base + i;
+					if (corrupt != 0)
+					{
+						SOAR_PRINT("LoggingService: skipped %lu corrupt cursor records in state sector (reset mid-save or bad write)\n",
+								   (unsigned long)corrupt);
+					}
 					return found;
 				}
 				//a slot that is written but invalid (reset mid-save) is skipped
@@ -90,9 +100,18 @@ namespace
 					record = page[i];
 					found = true;
 				}
+				else
+				{
+					corrupt++;
+				}
 			}
 		}
 
+		if (corrupt != 0)
+		{
+			SOAR_PRINT("LoggingService: skipped %lu corrupt cursor records in state sector (reset mid-save or bad write)\n",
+					   (unsigned long)corrupt);
+		}
 		return found;
 	}
 
@@ -318,12 +337,30 @@ void LoggingService::SaveFlashState()
 	MX66xxQSPI_ReadSector(reinterpret_cast<uint8_t*>(&check), FLASH_STATE_SECTOR, offset, sizeof(check));
 	if (!IsValidRecord(check) || check.sector != record.sector || check.bufferPerSector != record.bufferPerSector)
 	{
-		SOAR_PRINT("LoggingService: flash state save FAILED, read back magic=0x%08lX sector=%lu slot=%lu (wrote sector=%lu slot=%lu)\n",
+		const char* reason = (check.magic == 0xFFFFFFFFU) ? "record slot still blank, write did not happen"
+						   : (check.magic != FLASH_STATE_MAGIC) ? "bad magic, record slot was not blank or data corrupted"
+						   : (check.checksum != FlashStateChecksum(check)) ? "checksum mismatch, data corrupted"
+						   : "cursor values differ from what was written";
+		SOAR_PRINT("LoggingService: flash state save FAILED at record %lu: %s\n",
+				   (unsigned long)(stateSlot - 1), reason);
+		SOAR_PRINT("  read back magic=0x%08lX sector=%lu slot=%lu (wrote sector=%lu slot=%lu), cursor may be lost on reset\n",
 				   (unsigned long)check.magic,
 				   (unsigned long)check.sector,
 				   (unsigned long)check.bufferPerSector,
 				   (unsigned long)record.sector,
 				   (unsigned long)record.bufferPerSector);
+		const uint8_t* wrote = reinterpret_cast<const uint8_t*>(&record);
+		const uint8_t* read = reinterpret_cast<const uint8_t*>(&check);
+		uint32_t bad = 0, firstBad = 0;
+		for (uint32_t i = 0; i < sizeof(record); i++)
+		{
+			if (wrote[i] != read[i])
+			{
+				if (bad == 0) { firstBad = i; }
+				bad++;
+			}
+		}
+		PrintFlashFailDetails(bad, sizeof(record), firstBad, wrote[firstBad], read[firstBad]);
 	}
 }
 
@@ -398,6 +435,9 @@ void LoggingService::LoadFlashStateFromStorage()
 			SkipUsedSlots();
 			return;
 		}
+
+		SOAR_PRINT("LoggingService: saved flash cursor is invalid (sector=%lu slot=%lu, slot must be < 8), starting over\n",
+				   (unsigned long)record.sector, (unsigned long)record.bufferPerSector);
 	}
 
 	//no usable cursor saved (first boot or after the state sector was wiped), start logging from the beginning
@@ -425,13 +465,22 @@ LoggingStatus LoggingService::LogData(){
 
 	case LoggingDest::FILE_SYSTEM:
 		//TODO FS write api
-
+		SOAR_PRINT("LoggingService::LogData FAIL: %s packet sent to FILE_SYSTEM, which is not implemented\n",
+				   SensorTypeName(loggingData.dataType));
 		err = LoggingStatus::LOGGING_ERR;
 		break;
 
 	case LoggingDest::DMA:
 
 		//TODO DMA write api
+		SOAR_PRINT("LoggingService::LogData FAIL: %s packet sent to DMA, which is not implemented\n",
+				   SensorTypeName(loggingData.dataType));
+		err = LoggingStatus::LOGGING_ERR;
+		break;
+
+	default:
+		SOAR_PRINT("LoggingService::LogData FAIL: %s packet has unknown destination %d\n",
+				   SensorTypeName(loggingData.dataType), (int)loggingData.dest);
 		err = LoggingStatus::LOGGING_ERR;
 		break;
 	}
@@ -444,8 +493,17 @@ LoggingStatus LoggingService::LogToMX66(){
 
 	//polling starts at boot now, so data can arrive before FlashTask has reset the chip and set QPI / 4-byte mode.
 	//touching the flash before that runs commands in the wrong mode, so drop data until the flash is ready
+	static uint32_t droppedBeforeInit = 0;	//packets dropped while waiting for FlashTask to set up the chip
 	if (!FlashTask::Inst().IsFlashInitialized()){
+		if(droppedBeforeInit == 0){
+			SOAR_PRINT("FLASH LOG: flash not initialized yet, dropping data until FlashTask finishes init\n");
+		}
+		droppedBeforeInit++;
 		return LoggingStatus::LOG_FLASH_NOT_READY;
+	}
+	if(droppedBeforeInit != 0){
+		SOAR_PRINT("FLASH LOG: flash ready, %lu packets were dropped before init\n", (unsigned long)droppedBeforeInit);
+		droppedBeforeInit = 0;
 	}
 
 	//load flash state from storage (this will only actually do something the first time this function is run)
@@ -455,10 +513,22 @@ LoggingStatus LoggingService::LogToMX66(){
 	//appends data to buffer and returns flag determining if buffer is full (full => write data)
 	LoggingStatus status = MemAppend(&loggingData);
 
+	//MemAppend already printed why
+	if(status == LoggingStatus::LOGGING_ERR){
+		return LoggingStatus::LOGGING_ERR;
+	}
+
 	//stops logging, triggered by flash dump, or flashchip is full
+	static bool stopReported = false;	//print the reason once instead of on every packet
 	if(done){
+		if(!stopReported){
+			SOAR_PRINT("FLASH LOG: logging stopped (%s)\n",
+					   (sectorAddress == FLASH_STATE_SECTOR) ? "flash full" : "flash dump / StopLogging");
+			stopReported = true;
+		}
 		return LoggingStatus::FLASH_FULL;
 	}
+	stopReported = false;
 
 	//checks if 500 byte chunck is full (writes when it is full)
 	if(status != LoggingStatus::LOG_FLASH_READY){
@@ -480,15 +550,80 @@ LoggingStatus LoggingService::LogToMX66(){
 		MX66xxQSPI_EraseSector(sectorAddress);
 	}
 
+	const uint32_t slotOffset = bufferPerSector * RAM_LOG_SIZE;
+
+	//the slot must be blank (all 0xFF) before programming, flash can only clear bits
+	MX66xxQSPI_ReadSector(sectorBuf, sectorAddress, slotOffset, RAM_LOG_SIZE);
+	uint32_t notBlank = 0;
+	uint32_t firstNotBlank = 0;
+	for(uint32_t i = 0; i < RAM_LOG_SIZE; i++){
+		if(sectorBuf[i] != 0xFF){
+			if(notBlank == 0){ firstNotBlank = i; }
+			notBlank++;
+		}
+	}
+	if(notBlank != 0){
+		SOAR_PRINT("FLASH LOG FAIL sector=%u slot=%u: slot not blank before write (%s)\n",
+				   (unsigned int)sectorAddress, (unsigned int)bufferPerSector,
+				   (bufferPerSector == 0) ? "sector erase failed" : "slot already written");
+		PrintFlashFailDetails(notBlank, RAM_LOG_SIZE, firstNotBlank, 0xFF, sectorBuf[firstNotBlank]);
+		AdvanceSlot();
+		flashLock.Unlock();
+		return LoggingStatus::LOGGING_ERR;
+	}
+
 	//Write data to bufferPerSector * 500 this calculates the offset at which the buffer will be written
 	memcpy(txBuf, ramLog, RAM_LOG_SIZE);
 
-	MX66xxQSPI_WriteSector(txBuf, sectorAddress, (bufferPerSector * RAM_LOG_SIZE),  RAM_LOG_SIZE);
+	MX66xxQSPI_WriteSector(txBuf, sectorAddress, slotOffset,  RAM_LOG_SIZE);
 
-	MX66xxQSPI_ReadSector(sectorBuf, sectorAddress, (bufferPerSector * RAM_LOG_SIZE),  RAM_LOG_SIZE);
+	MX66xxQSPI_ReadSector(sectorBuf, sectorAddress, slotOffset,  RAM_LOG_SIZE);
 
 	//check if the bytes written equal the bytes read
-	const bool written = BytesEqual(sectorBuf, txBuf, RAM_LOG_SIZE);
+	bool written = BytesEqual(sectorBuf, txBuf, RAM_LOG_SIZE);
+
+	if(!written){
+		//work out how the read back differs from what was written
+		uint32_t bad = 0, firstBad = 0;
+		uint32_t needed1Got0 = 0;	//bytes with bits read 0 that should be 1 (slot was not blank / corrupted)
+		uint32_t needed0Got1 = 0;	//bytes with bits read 1 that should be 0 (program did not finish)
+		bool allFF = true;
+		for(uint32_t i = 0; i < RAM_LOG_SIZE; i++){
+			if(sectorBuf[i] != 0xFF){ allFF = false; }
+			if(sectorBuf[i] != txBuf[i]){
+				if(bad == 0){ firstBad = i; }
+				bad++;
+				if(txBuf[i] & ~sectorBuf[i]){ needed1Got0++; }
+				if(sectorBuf[i] & ~txBuf[i]){ needed0Got1++; }
+			}
+		}
+		const uint8_t badRead = sectorBuf[firstBad];
+
+		//read a second time, if it matches now the data on flash is fine and the first read was bad
+		MX66xxQSPI_ReadSector(sectorBuf, sectorAddress, slotOffset, RAM_LOG_SIZE);
+		const bool rereadOk = BytesEqual(sectorBuf, txBuf, RAM_LOG_SIZE);
+
+		const char* reason;
+		if(rereadOk){
+			reason = "read back glitch, data OK on 2nd read (QSPI read timing/noise)";
+		} else if(allFF){
+			reason = "nothing was programmed (write did not happen)";
+		} else if(needed0Got1 != 0 && needed1Got0 == 0){
+			reason = "program incomplete (some bits still 1)";
+		} else if(needed1Got0 != 0 && needed0Got1 == 0){
+			reason = "bits read 0 that should be 1 (slot not blank / corrupted)";
+		} else {
+			reason = "data corrupted (mixed bit errors)";
+		}
+
+		SOAR_PRINT("FLASH LOG %s sector=%u slot=%u: %s\n",
+				   rereadOk ? "WARN" : "FAIL",
+				   (unsigned int)sectorAddress, (unsigned int)bufferPerSector, reason);
+		PrintFlashFailDetails(bad, RAM_LOG_SIZE, firstBad, txBuf[firstBad], badRead);
+
+		//the chunk is on flash correctly, only the verify read was wrong
+		written = rereadOk;
+	}
 
 	//move on either way, a chunk that failed read back is left behind instead of being retried
 	AdvanceSlot();
@@ -496,6 +631,27 @@ LoggingStatus LoggingService::LogToMX66(){
 	flashLock.Unlock();
 
 	return written ? LoggingStatus::LOGGING_SUCCESS : LoggingStatus::LOGGING_ERR;
+}
+
+//second line of a flash log failure: which byte failed and the chip / QSPI status at that moment
+void LoggingService::PrintFlashFailDetails(uint32_t badBytes, uint32_t totalBytes, uint32_t firstBad, uint8_t expected, uint8_t got){
+	const uint8_t sr = MX66xxQSPI_ReadStatusRegister();
+	const uint8_t scur = MX66xxQSPI_ReadSecurityRegister();
+
+	//totalBytes == 0 means there is no byte comparison, only the chip status
+	if(totalBytes != 0){
+		SOAR_PRINT("  bad=%u/%u first@%u expected=0x%02X read=0x%02X\n",
+				   (unsigned int)badBytes, (unsigned int)totalBytes, (unsigned int)firstBad,
+				   (unsigned int)expected, (unsigned int)got);
+	}
+	SOAR_PRINT("  SR=0x%02X%s%s SCUR=0x%02X%s%s qspiErr=0x%lX\n",
+			   (unsigned int)sr,
+			   (sr & 0x01) ? " BUSY" : "",				//WIP, chip still busy with the last program / erase
+			   (sr & 0x3C) ? " WRITE_PROTECTED" : "",	//block protect bits set
+			   (unsigned int)scur,
+			   (scur & 0x20) ? " P_FAIL" : "",			//chip reported the last program failed
+			   (scur & 0x40) ? " E_FAIL" : "",			//chip reported the last erase failed
+			   (unsigned long)hqspi.ErrorCode);
 }
 
 //Sensor type enum to string conversion function (used for flash dump printing)
@@ -532,8 +688,11 @@ void LoggingService::ProcessFlashDump()
 
 	//variables for gps read back
 	char gpsSentence[256] = {0};
+
+	//records that could not be printed, reported at the end
+	uint32_t blankRecords = 0;		//type byte 0xFF, part of a chunk that was never written (failed write left behind)
+	uint32_t unknownRecords = 0;	//type byte is not a LoggingData value (corrupted data)
 	uint16_t gpsSentenceLen = 0;
-	uint8_t gpsExpectedChunks = 0;
 	uint32_t gpsTimestamp = 0;
 
 	// Snapshot the logged extent so we don't walk the entire flash device.
@@ -561,6 +720,12 @@ void LoggingService::ProcessFlashDump()
 		maxOffset = SECTOR_READ;
 	}
 
+	//legend for the minimal dump format: type[data] timestamp
+	SOAR_PRINT("0=%s 1=%s 2=%s 3=%s 4=%s 5=%s\n",
+			   SensorTypeName(LoggingData::IMU32G), SensorTypeName(LoggingData::IMU16G),
+			   SensorTypeName(LoggingData::MAG), SensorTypeName(LoggingData::BARO07),
+			   SensorTypeName(LoggingData::BARO11), SensorTypeName(LoggingData::GPS));
+
 	/*
 	 * this loops through the flash chip while the dumpSector is less than the max sector or if the max sector is
 	 * reached it reads back up to the max offset of the sector. Done dump flag as well must be false to continue
@@ -576,7 +741,6 @@ void LoggingService::ProcessFlashDump()
 			LoggingData type = static_cast<LoggingData>(sectorBuf[i]); //get type byte first
 			uint32_t timestamp;
 			memcpy(&timestamp, sectorBuf + i + 1, sizeof(timestamp));
-			uint8_t id = sectorBuf[i + 19];
 
 			//parse the data back into structs
 
@@ -589,11 +753,12 @@ void LoggingService::ProcessFlashDump()
 				memcpy(gyro, sectorBuf + i + 11, sizeof(gyro));
 				memcpy(&temp, sectorBuf + i + 17, sizeof(temp));
 
-				SOAR_PRINT("%s(ID=%u) Timestamp=%lu Accel=[%d,%d,%d] Gyro=[%d,%d,%d] Temp=%d\n",
-									SensorTypeName(type), id, timestamp,
-									accel[0], accel[1], accel[2],
-									gyro[0], gyro[1], gyro[2],
-									temp);
+				//minimal format: type[accel xyz,gyro xyz,temp] timestamp
+				SOAR_PRINT("%u[%d,%d,%d,%d,%d,%d,%d] %lu\n",
+						   (unsigned int)type,
+						   accel[0], accel[1], accel[2],
+						   gyro[0], gyro[1], gyro[2],
+						   temp, (unsigned long)timestamp);
 			}
 			//parse baro and print
 			else if(type == LoggingData::BARO07 || type == LoggingData::BARO11)
@@ -603,12 +768,9 @@ void LoggingService::ProcessFlashDump()
 				memcpy(&pressure, sectorBuf + i + 5, sizeof(pressure));
 				memcpy(&temperature, sectorBuf + i + 9, sizeof(temperature));
 
-				int16_t temp_c = temperature / 100;          // integer part
-				int16_t temp_frac = temperature % 100;       // fractional part
-				if (temp_frac < 0) temp_frac = -temp_frac;   // handle negative temperatures
-
-				SOAR_PRINT("%s(ID=%u) Timestamp=%lu Pressure=%ld Temp=%d.%02d\n",
-							SensorTypeName(type), id, timestamp, pressure, temp_c, temp_frac);
+				//minimal format: type[pressure Pa,temp in 0.01 C] timestamp
+				SOAR_PRINT("%u[%ld,%d] %lu\n",
+						   (unsigned int)type, (long)pressure, temperature, (unsigned long)timestamp);
 
 			}
 			//parse mag and print
@@ -620,9 +782,9 @@ void LoggingService::ProcessFlashDump()
 				memcpy(&magY, sectorBuf + i + 9,  sizeof(int32_t));
 				memcpy(&magZ, sectorBuf + i + 13, sizeof(int32_t));
 
-				SOAR_PRINT("%s Timestamp=%lu Mag=[%ld,%ld,%ld]\n",
-					SensorTypeName(type), timestamp,
-					(long)magX, (long)magY, (long)magZ);
+				//minimal format: type[x,y,z] timestamp
+				SOAR_PRINT("%u[%ld,%ld,%ld] %lu\n",
+						   (unsigned int)type, (long)magX, (long)magY, (long)magZ, (unsigned long)timestamp);
 
 			}
 			//parse gps and print
@@ -645,7 +807,6 @@ void LoggingService::ProcessFlashDump()
 				{
 					memset(gpsSentence, 0, sizeof(gpsSentence));
 					gpsSentenceLen = 0;
-					gpsExpectedChunks = chunkCount;
 					gpsTimestamp = timestamp;
 				}
 
@@ -661,10 +822,9 @@ void LoggingService::ProcessFlashDump()
 				//If the last chunk is detected the sentence can br printed to the serial terminal
 				if ((chunkCount > 0U) && (chunkIdx + 1U >= chunkCount))
 				{
-					SOAR_PRINT("GPS Timestamp=%lu Chunks=%u Sentence=%s\n",
-							   (unsigned long)gpsTimestamp,
-							   (unsigned int)gpsExpectedChunks,
-							   gpsSentence);
+					//minimal format: type[sentence] timestamp
+					SOAR_PRINT("%u[%s] %lu\n",
+							   (unsigned int)type, gpsSentence, (unsigned long)gpsTimestamp);
 				}
 			}
 			//parse altitude prediction filter output and print (layout: AltitudePredictionFilter/Output/Inc/FilterLog.hpp)
@@ -699,6 +859,14 @@ void LoggingService::ProcessFlashDump()
 				SOAR_PRINT("EVENT Timestamp=%lu Code=%u Value=%ld State=%u\n",
 						   (unsigned long)timestamp, (unsigned int)sectorBuf[i + 5], (long)value, (unsigned int)sectorBuf[i + 10]);
 			}
+			else if (sectorBuf[i] == 0xFF)
+			{
+				blankRecords++;
+			}
+			else
+			{
+				unknownRecords++;
+			}
 
 		}
 		/*the dump offset at this point should be 3500, this means sector is full
@@ -714,6 +882,12 @@ void LoggingService::ProcessFlashDump()
 
 		// Let lower-priority UART/debug tasks run while the dump is in progress.
 		osDelay(1);
+	}
+
+	if (blankRecords != 0 || unknownRecords != 0)
+	{
+		SOAR_PRINT("FLASH DUMP: skipped %lu blank records (unwritten chunks) and %lu records with unknown type (corrupted)\n",
+				   (unsigned long)blankRecords, (unsigned long)unknownRecords);
 	}
 
 	if (doneDump)
@@ -755,10 +929,7 @@ void LoggingService::StopLogging(){
 
 LoggingStatus LoggingService::LogToInternalMemory(){
 
-	if(loggingData.data == nullptr || loggingData.dataSize == 0){
-		return LoggingStatus::LOGGING_ERR;
-	}
-
+	//MemAppend prints the reason if the packet has no data
 	return MemAppend(&loggingData);
 
 }
@@ -783,20 +954,26 @@ bool LoggingService::BytesEqual(const uint8_t* a, const uint8_t* b, uint32_t n){
  */
 LoggingStatus LoggingService::MemAppend(const LoggingPacket *data){
 
-	if(!data){return LoggingStatus::LOGGING_ERR;}
+	if(!data){
+		SOAR_PRINT("LoggingService::MemAppend FAIL: packet pointer is null\n");
+		return LoggingStatus::LOGGING_ERR;
+	}
+
+	if(data->data == nullptr || data->dataSize == 0){
+		SOAR_PRINT("LoggingService::MemAppend FAIL: %s packet has no data (data=%s size=%u)\n",
+				   SensorTypeName(data->dataType),
+				   (data->data == nullptr) ? "null" : "ok",
+				   (unsigned int)data->dataSize);
+		return LoggingStatus::LOGGING_ERR;
+	}
 
 	uint32_t size = data->dataSize;
 
 	if (size > MAX_LOG_SIZE){
+		SOAR_PRINT("LoggingService::MemAppend WARN: %s packet is %u bytes, truncated to %u\n",
+				   SensorTypeName(data->dataType), (unsigned int)size, (unsigned int)MAX_LOG_SIZE);
 		size = MAX_LOG_SIZE;
 	}
-
-	if(ramHead + MAX_LOG_SIZE > RAM_LOG_SIZE){ //check if word will fit in buffer
-		ramHead = 0;
-
-		return LoggingStatus::LOG_FLASH_READY;
-	}
-
 
 	for(uint32_t i = 0; i < size; i++){
 
@@ -807,6 +984,13 @@ LoggingStatus LoggingService::MemAppend(const LoggingPacket *data){
 		ramLog[ramHead++] = 0;
 	}
 
+	//store the packet first, then report full when the next one will not fit
+	//(used to return full before storing, which dropped one packet per chunk)
+	if(ramHead + MAX_LOG_SIZE > RAM_LOG_SIZE){
+		ramHead = 0;
+
+		return LoggingStatus::LOG_FLASH_READY;
+	}
 
 	return LoggingStatus::LOG_FLASH_NOT_READY;
 
@@ -817,7 +1001,18 @@ void LoggingService::FlashClear(){
 
 	//clear flash chip bounds, sector 0 for the new data and the state sector for the cursor log
 	MX66xxQSPI_EraseSector(0);
+	if (!MX66xxQSPI_IsEmptySector(0, 0, FS_SECTOR_SIZE))
+	{
+		SOAR_PRINT("Flash clear FAIL: sector 0 not blank after erase, first log chunk will fail its blank check\n");
+		PrintFlashFailDetails(0, 0, 0, 0xFF, 0);
+	}
 	MX66xxQSPI_EraseSector(FLASH_STATE_SECTOR);
+	if (!MX66xxQSPI_IsEmptySector(FLASH_STATE_SECTOR, 0, FS_SECTOR_SIZE))
+	{
+		SOAR_PRINT("Flash clear FAIL: state sector %u not blank after erase, old cursor records may remain\n",
+				   (unsigned int)FLASH_STATE_SECTOR);
+		PrintFlashFailDetails(0, 0, 0, 0xFF, 0);
+	}
 	stateSlot = 0;
 	stateSlotKnown = true;
 

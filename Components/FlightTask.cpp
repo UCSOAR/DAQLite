@@ -85,7 +85,9 @@ void FlightTask::HandleDataBrokerCommand(Command& cm){
 	case DataBrokerMessageTypes::BARO_DATA:
 	{
 		BaroData data = DataBroker::ExtractData<BaroData>(cm);
-		changed = stateMachine.OnBaro(data.id, data.pressure, nowMs);
+		if (data.id == BARO07_ID) {
+			changed = stateMachine.OnBaro(data.id, data.pressure, nowMs);
+		}
 		break;
 	}
 	default:
