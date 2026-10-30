@@ -2,6 +2,8 @@
 CAD.formats=
 CAD.pinconfig=
 CAD.provider=
+CORTEX_M7.CPU_ICache=Enabled
+CORTEX_M7.IPParameters=CPU_ICache
 FREERTOS.IPParameters=Tasks01,configTOTAL_HEAP_SIZE,configMINIMAL_STACK_SIZE,configUSE_TIMERS,configUSE_NEWLIB_REENTRANT
 FREERTOS.Tasks01=defaultTask,0,192,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL
 FREERTOS.configMINIMAL_STACK_SIZE=192
@@ -266,7 +268,7 @@ ProjectManager.UAScriptBeforePath=
 ProjectManager.UnderRoot=true
 ProjectManager.functionlistsort=1-SystemClock_Config-RCC-false-HAL-false,2-MX_GPIO_Init-GPIO-false-HAL-true,3-MX_CRC_Init-CRC-false-HAL-true,4-MX_SPI1_Init-SPI1-false-HAL-true,5-MX_SPI2_Init-SPI2-false-HAL-true,6-MX_SPI3_Init-SPI3-false-HAL-true,7-MX_SPI4_Init-SPI4-false-HAL-true,8-MX_QUADSPI_Init-QUADSPI-false-HAL-true,9-MX_FATFS_Init-FATFS-false-HAL-false,10-MX_USART1_UART_Init-USART1-false-HAL-true,11-MX_TIM3_Init-TIM3-false-HAL-true,0-MX_CORTEX_M7_Init-CORTEX_M7-false-HAL-true
 QUADSPI.ChipSelectHighTime=QSPI_CS_HIGH_TIME_2_CYCLE
-QUADSPI.ClockPrescaler=7
+QUADSPI.ClockPrescaler=3
 QUADSPI.FlashSize=25
 QUADSPI.IPParameters=ClockPrescaler,SampleShifting,FlashSize,ChipSelectHighTime
 QUADSPI.SampleShifting=QSPI_SAMPLE_SHIFTING_HALFCYCLE

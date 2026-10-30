@@ -163,6 +163,11 @@ uint32_t GetStatsTimerCount(void);
 #define INCLUDE_xTaskGetHandle  1
 #endif
 
+// The timer task runs the poll timer callback (it only sends PollingTask a command). Keep it above
+// the APF (SensorFrameTask) so a long filter / predictor run can never delay or skip a poll
+#undef configTIMER_TASK_PRIORITY
+#define configTIMER_TASK_PRIORITY                ( 5 )
+
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

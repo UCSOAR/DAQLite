@@ -94,6 +94,13 @@ void FlightTask::HandleDataBrokerCommand(Command& cm){
 		break;
 	}
 
+	// force_flight: the state machine keeps running (accel / altitude stay live) but is not
+	// allowed to land, put it straight back into FLIGHT without announcing a state change
+	if (forceFlight && stateMachine.GetState() != FlightState::FLIGHT) {
+		stateMachine.Restore(FlightState::FLIGHT, nowMs);
+		changed = false;
+	}
+
 	if (changed) {
 		OnStateChange(nowMs);
 	}
@@ -122,6 +129,21 @@ void FlightTask::HandleTaskCommand(uint16_t taskCommand){
 		Command rateCmd(DATA_COMMAND, inFlight ? PollingTask::SET_FLIGHT_RATE : PollingTask::SET_GROUND_RATE);
 		PollingTask::Inst().GetEventQueue()->Send(rateCmd);
 		SOAR_PRINT("FLIGHT: restored %s after a power loss\n", inFlight ? "FLIGHT" : "GROUND (landed)");
+		break;
+	}
+	case TOGGLE_FORCE_FLIGHT:
+	{
+		forceFlight = !forceFlight;
+		if (forceFlight) {
+			const bool wasFlight = (stateMachine.GetState() == FlightState::FLIGHT);
+			if (!wasFlight) {
+				stateMachine.Restore(FlightState::FLIGHT, NowMs());
+				OnStateChange(NowMs());	// flight poll rate, hasFlown, prints GROUND -> FLIGHT
+			}
+			SOAR_PRINT("FlightTask - force flight ON, staying in FLIGHT until force_flight is sent again\n");
+		} else {
+			SOAR_PRINT("FlightTask - force flight OFF, normal detection (lands after the board is still)\n");
+		}
 		break;
 	}
 	case TOGGLE_TEST_MODE:
@@ -158,13 +180,13 @@ void FlightTask::PrintState(uint32_t nowMs){
 			   (unsigned int)stateMachine.GetLastAccelMg());
 
 	if (stateMachine.HasAltitude()) {
-		SOAR_PRINT("FLIGHT STATE | alt=%d m testMode=%s pollDuration=%u ms\n",
+		SOAR_PRINT("FLIGHT STATE | alt=%d m testMode=%s forceFlight=%s pollDuration=%u ms\n",
 				   (int)stateMachine.GetAltitudeAglM(),
-				   testMode ? "ON" : "OFF",
+				   testMode ? "ON" : "OFF", forceFlight ? "ON" : "OFF",
 				   (unsigned int)PollingTask::Inst().GetLastPollDurationMs());
 	} else {
-		SOAR_PRINT("FLIGHT STATE | alt=n/a testMode=%s pollDuration=%u ms\n",
-				   testMode ? "ON" : "OFF",
+		SOAR_PRINT("FLIGHT STATE | alt=n/a testMode=%s forceFlight=%s pollDuration=%u ms\n",
+				   testMode ? "ON" : "OFF", forceFlight ? "ON" : "OFF",
 				   (unsigned int)PollingTask::Inst().GetLastPollDurationMs());
 	}
 }

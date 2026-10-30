@@ -48,12 +48,12 @@ enum GLOBAL_COMMANDS : uint8_t
 /* - Lower priority number means lower priority task ---------------------------------*/
 
 // UART TASK
-constexpr uint8_t UART_TASK_RTOS_PRIORITY = 2;            // Priority of the uart task
+constexpr uint8_t UART_TASK_RTOS_PRIORITY = 3;            // Priority of the uart task (same as the APF: time sliced, prints and flash_dump keep running while it is busy)
 constexpr uint8_t UART_TASK_QUEUE_DEPTH_OBJS = 10;        // Size of the uart task queue
 constexpr uint16_t UART_TASK_STACK_DEPTH_WORDS = 512;    // Size of the uart task stack
 
 // DEBUG TASK
-constexpr uint8_t TASK_DEBUG_PRIORITY = 2;            // Priority of the debug task
+constexpr uint8_t TASK_DEBUG_PRIORITY = 3;            // Priority of the debug task (same as the APF so commands are still handled while it is busy)
 constexpr uint8_t TASK_DEBUG_QUEUE_DEPTH_OBJS = 10;        // Size of the debug task queue
 constexpr uint16_t TASK_DEBUG_STACK_DEPTH_WORDS = 512;        // Size of the debug task stack
 
@@ -62,7 +62,10 @@ constexpr uint8_t TASK_PROFILER_PRIORITY = 2;            // Priority of the prof
 constexpr uint8_t TASK_PROFILER_QUEUE_DEPTH_OBJS = 10;        // Size of the profiling task queue
 constexpr uint16_t TASK_PROFILER_STACK_DEPTH_WORDS = 512;        // Size of the profiling task stack
 
-constexpr uint8_t TASK_LOGGING_PRIORITY = 3;
+// Polling, logging and FlightTask run above the APF (SensorFrameTask) so a long filter / predictor
+// run can not stop sensor polling, raw data logging or launch / landing detection
+constexpr uint8_t TASK_POLLING_PRIORITY = 4;
+constexpr uint8_t TASK_LOGGING_PRIORITY = 4;
 constexpr uint8_t TASK_LOGGING_QUEUE_DEPTH_OBJS = 32;	// Was 10: ~6 messages per poll filled it while logging (re)started
 constexpr uint16_t TASK_LOGGING_QUEUE_DEPTH_WORDS = 512;
 
@@ -77,7 +80,7 @@ constexpr uint8_t TASK_FLASH_QUEUE_DEPTH_OBJS = 8;      // Size of the flash tas
 constexpr uint16_t TASK_FLASH_STACK_DEPTH_WORDS = 1024; // Size of the flash task stack
 
 // FLIGHT TASK
-constexpr uint8_t TASK_FLIGHT_PRIORITY = 3;            // Priority of the flight task
+constexpr uint8_t TASK_FLIGHT_PRIORITY = 4;            // Priority of the flight task (above the APF, see TASK_POLLING_PRIORITY)
 constexpr uint8_t TASK_FLIGHT_QUEUE_DEPTH_OBJS = 32;    // Size of the flight task queue (all IMU + baro messages per poll)
 constexpr uint16_t TASK_FLIGHT_STACK_DEPTH_WORDS = 768; // Size of the flight task stack
 
