@@ -34,7 +34,7 @@ void PollingTask::InitTask()
             (const char*)"PollingTask",
             (uint16_t)TASK_LOGGING_QUEUE_DEPTH_WORDS,
             (void*)this,
-            (UBaseType_t)TASK_LOGGING_PRIORITY,
+            (UBaseType_t)TASK_POLLING_PRIORITY,
             (TaskHandle_t*)&rtTaskHandle);
 
                 SOAR_ASSERT(rtValue == pdPASS, "PollingTask::InitTask() - xTaskCreate() failed");
@@ -216,16 +216,12 @@ void PollingTask::PollSensors()
 	baro07Data = barometer07.getSample();
 	baro07Data.id = 0;
 
-	baro11Data = barometer11.getSample();
-	baro11Data.id = 1;
+	// baro11 and imu32b are not polled (baro11 drifts ~1000 Pa on a still board). Both can still
+	// be read with the baro11 / imu32b debug commands
 
 	imu16.readSensors(data);
 	imu16Data = imu16.bytesToStruct(data, true, true, true);
 	imu16Data.id = 0;
-
-	imu32b.ReadSensors(data);
-	imu32DataB = imu32b.ConvertRawMeasurementToStruct(data);
-	imu32DataB.id = 2;	// unique id so FlightTask only uses imu32a (id 1)
 
 	BusLocks::spi1.Lock();		// SPI1 is shared with the GPS (GpsTask)
 	imu32a.ReadSensors(data);
@@ -248,9 +244,7 @@ void PollingTask::PollSensors()
 
 void PollingTask::LogData(){
 	DataBroker::Publish<IMUData>(&imu16Data);
-	DataBroker::Publish<IMUData>(&imu32DataB);
 	DataBroker::Publish<IMUData>(&imu32DataA);
 	DataBroker::Publish<BaroData>(&baro07Data);
-	DataBroker::Publish<BaroData>(&baro11Data);
 	DataBroker::Publish<MagData>(&magData);
 }

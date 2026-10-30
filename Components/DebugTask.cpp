@@ -209,6 +209,10 @@ void DebugTask::HandleDebugMessage(const char *msg)
   	  Command cmd(TASK_SPECIFIC_COMMAND, FlightTask::TOGGLE_TEST_MODE);
   	  FlightTask::Inst().GetEventQueue()->Send(cmd);
   }
+  else if (strcmp(msg, "force_flight") == 0){
+  	  Command cmd(TASK_SPECIFIC_COMMAND, FlightTask::TOGGLE_FORCE_FLIGHT);
+  	  FlightTask::Inst().GetEventQueue()->Send(cmd);
+  }
   else if (strncmp(msg, "APF_", 4) == 0)
   {
     // Altitude prediction filter debug commands, handled by the SensorFrameTask

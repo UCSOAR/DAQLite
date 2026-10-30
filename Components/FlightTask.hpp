@@ -21,7 +21,8 @@ class FlightTask: public Task
 			PRINT_STATE = 1,
 			TOGGLE_TEST_MODE = 2,
 			RESTORE_FLIGHT = 3,		// power loss: boot straight into FLIGHT (SensorFrameTask, saved filter state)
-			RESTORE_LANDED = 4		// power loss: boot straight into GROUND after a flight
+			RESTORE_LANDED = 4,		// power loss: boot straight into GROUND after a flight
+			TOGGLE_FORCE_FLIGHT = 5	// debug: hold FLIGHT regardless of sensors until toggled off
 		};
 
 		static FlightTask& Inst() {
@@ -60,6 +61,7 @@ class FlightTask: public Task
 		volatile FlightState flightState = FlightState::GROUND;	// copy of stateMachine's state for other tasks
 		volatile bool hasFlown = false;							// set on the first GROUND -> FLIGHT, never cleared
 		bool testMode = false;
+		bool forceFlight = false;	// debug force_flight: stay in FLIGHT, stillness can not end it
 		uint32_t lastTestPrintMs = 0;
 };
 
