@@ -89,7 +89,7 @@ void LoggingTask::InitTask()
 
 	DataBroker::Subscribe<IMUData>(this);
 	DataBroker::Subscribe<BaroData>(this);
-	DataBroker::Subscribe<MagData>(this);
+	// MagData is not logged (still polled and published, the APF closes each frame on it)
 	DataBroker::Subscribe<GPSData>(this);
 	DataBroker::Subscribe<FilterData>(this);
 

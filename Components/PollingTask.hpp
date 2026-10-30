@@ -42,7 +42,7 @@ class PollingTask: public Task
 			SET_FLIGHT_RATE		// sent by FlightTask
 		};
 
-		static constexpr uint32_t GROUND_POLL_PERIOD_MS = 20;	// Was 500: max rate on the pad so the APF tare / launch detection run at flight rate
+		static constexpr uint32_t GROUND_POLL_PERIOD_MS = 200;	// 5 Hz on the pad, 50 Hz ground logging is not needed
 		static constexpr uint32_t FLIGHT_POLL_PERIOD_MS = 50;	// tune from GetLastPollDurationMs()
 
 		static PollingTask& Inst() {
