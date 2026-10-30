@@ -164,9 +164,10 @@ uint32_t GetStatsTimerCount(void);
 #endif
 
 // The timer task runs the poll timer callback (it only sends PollingTask a command). Keep it above
-// the APF (SensorFrameTask) so a long filter / predictor run can never delay or skip a poll
+// the APF (SensorFrameTask) so a long filter run can never delay or skip a poll. Highest task (6),
+// FlightTask is next (5)
 #undef configTIMER_TASK_PRIORITY
-#define configTIMER_TASK_PRIORITY                ( 5 )
+#define configTIMER_TASK_PRIORITY                ( 6 )
 
 /* USER CODE END Defines */
 

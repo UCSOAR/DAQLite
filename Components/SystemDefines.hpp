@@ -80,7 +80,7 @@ constexpr uint8_t TASK_FLASH_QUEUE_DEPTH_OBJS = 8;      // Size of the flash tas
 constexpr uint16_t TASK_FLASH_STACK_DEPTH_WORDS = 1024; // Size of the flash task stack
 
 // FLIGHT TASK
-constexpr uint8_t TASK_FLIGHT_PRIORITY = 4;            // Priority of the flight task (above the APF, see TASK_POLLING_PRIORITY)
+constexpr uint8_t TASK_FLIGHT_PRIORITY = 5;            // Priority of the flight task: highest after the timer task (6), launch / landing detection never waits
 constexpr uint8_t TASK_FLIGHT_QUEUE_DEPTH_OBJS = 32;    // Size of the flight task queue (all IMU + baro messages per poll)
 constexpr uint16_t TASK_FLIGHT_STACK_DEPTH_WORDS = 768; // Size of the flight task stack
 

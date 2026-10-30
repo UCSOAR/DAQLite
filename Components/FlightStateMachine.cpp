@@ -11,14 +11,14 @@
 FlightThresholds FlightThresholds::Normal()
 {
 	FlightThresholds t;
-	t.launchAccelMg = 3000;
-	t.launchAccelWindowMs = 250;
+	t.launchAccelMg = 1500;	// low so launch is caught early; a shake on the pad is a false launch the APF undoes (never climbs)
+	t.launchAccelWindowMs = 100;	// at the 5 Hz ground rate this is 2 samples in a row above 1.5 g
 	t.backupAltM = 30.0f;
 	t.backupAltWindowMs = 500;
-	t.minFlightMs = 30000;
-	t.stillWindowMs = 10000;
-	t.stillAltBandM = 10.0f;	// baro noise is a few m per sample, so allow 20 m spread over the window
-	t.stillAccelTolMg = 200;
+	t.minFlightMs = 3000;	// same as the bench thresholds; coast / apogee read ~0 g so the accel check stops an early landing
+	t.stillWindowMs = 3000;	// 3 s of stillness (accel and altitude) to land
+	t.stillAltBandM = 5.0f;	// 10 m spread over the 3 s window: a descent faster than ~3.3 m/s (main chute) is not landed
+	t.stillAccelTolMg = 400;	// 0.6-1.4 g: imu32a reads ~1.05 g at rest and one noisy sample restarts the window
 	t.baroAvgWindowMs = 500;
 	t.padSettleMs = 5000;
 	t.padRefTauS = 30.0f;
