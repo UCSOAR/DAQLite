@@ -7,3 +7,7 @@
 	url = https://github.com/UCSOAR/PeripheralDriversSubmodule.git
 	branch = master
 
+[submodule "AltitudePredictionFilter"]
+	path = AltitudePredictionFilter
+	url = https://github.com/UCSOAR/AltitudePredictionFilter.git
+	branch = redesign
