@@ -260444,4 +260444,213 @@ PreProcess: alignment CHECK MOUNTING (max pad tilt 30000 mdeg)
   IMU1 gBody=(9933,-122,63) mm/s2 tilt=89635 mdeg
 PreProcess: UKF init valid=1 groundAlt=1055961 mm x0=(0,0,0)
   P0 diag (x1000)=(3309,10,10) Q diag (x1000)=(224332224,7239060,1511340) R diag (x1000)=(15438090,5005790,613200)
-APF state: PRE_LAUNCH -> DETECTI
+APF state: PRE_LAUNCH -> DETECTION at t=28818ms
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 87, pad start
+LoggingService: resuming from saved flash cursor sector=296 slot=0
+PreProcess: tare done, n=27 t=5192ms (values in milli-units)
+  BARO0 valid=1 p0=89279816 mPa std=21457 mPa alt0=1054701 mm altStd=1979 mm
+  BARO1 valid=0 p0=0 mPa std=0 mPa alt0=0 mm altStd=0 mm
+  IMU0 valid=1 g=(151,-13,10037) mm/s2 gyroBias=(-208,-39,-8) mrad/s
+  IMU0 accStd=(27,22,32) mm/s2 gyroStd=(1,1,1) mrad/s
+  IMU1 valid=1 g=(212,-2,9969) mm/s2 gyroBias=(146,-170,-72) mrad/s
+  IMU1 accStd=(35,40,39) mm/s2 gyroStd=(1,1,1) mrad/s
+PreProcess: alignment CHECK MOUNTING (max pad tilt 30000 mdeg)
+  IMU0 gBody=(10037,13,151) mm/s2 tilt=89135 mdeg
+  IMU1 gBody=(9969,-212,2) mm/s2 tilt=89987 mdeg
+PreProcess: UKF init valid=1 groundAlt=1054701 mm x0=(0,0,0)
+  P0 diag (x1000)=(3916,10,10) Q diag (x1000)=(224332224,7239060,1511340) R diag (x1000)=(15438090,5005790,613200)
+APF state: PRE_LAUNCH -> DETECTION at t=5406ms
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 88, pad start
+LoggingService: resuming from saved flash cursor sector=336 slot=0
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 89, pad start
+LoggingService: resuming from saved flash cursor sector=336 slot=0
+PreProcess: tare done, n=27 t=5192ms (values in milli-units)
+  BARO0 valid=1 p0=89248336 mPa std=27841 mPa alt0=1057605 mm altStd=2568 mm
+  BARO1 valid=0 p0=0 mPa std=0 mPa alt0=0 mm altStd=0 mm
+  IMU0 valid=1 g=(165,4,10129) mm/s2 gyroBias=(4,-1,1) mrad/s
+  IMU0 accStd=(19,31,40) mm/s2 gyroStd=(11,5,2) mrad/s
+  IMU1 valid=1 g=(186,-7,10009) mm/s2 gyroBias=(1,-1,0) mrad/s
+  IMU1 accStd=(45,32,39) mm/s2 gyroStd=(6,12,2) mrad/s
+PreProcess: alignment CHECK MOUNTING (max pad tilt 30000 mdeg)
+  IMU0 gBody=(10129,-4,165) mm/s2 tilt=89067 mdeg
+  IMU1 gBody=(10009,-186,7) mm/s2 tilt=89958 mdeg
+PreProcess: UKF init valid=1 groundAlt=1057605 mm x0=(0,0,0)
+  P0 diag (x1000)=(6597,10,10) Q diag (x1000)=(224332224,7239060,1511340) R diag (x1000)=(15438090,5005790,613200)
+APF state: PRE_LAUNCH -> DETECTION at t=5406ms
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 90, pad start
+LoggingService: resuming from saved flash cursor sector=336 slot=0
+PreProcess: tare done, n=27 t=5192ms (values in milli-units)
+  BARO0 valid=1 p0=89264296 mPa std=27481 mPa alt0=1056133 mm altStd=2535 mm
+  BARO1 valid=0 p0=0 mPa std=0 mPa alt0=0 mm altStd=0 mm
+  IMU0 valid=1 g=(152,-39,10036) mm/s2 gyroBias=(-202,-33,11) mrad/s
+  IMU0 accStd=(22,28,57) mm/s2 gyroStd=(7,4,1) mrad/s
+  IMU1 valid=1 g=(175,-4,9948) mm/s2 gyroBias=(142,-213,-49) mrad/s
+  IMU1 accStd=(34,43,88) mm/s2 gyroStd=(3,8,1) mrad/s
+PreProcess: alignment CHECK MOUNTING (max pad tilt 30000 mdeg)
+  IMU0 gBody=(10036,39,152) mm/s2 tilt=89131 mdeg
+  IMU1 gBody=(9948,-175,4) mm/s2 tilt=89977 mdeg
+PreProcess: UKF init valid=1 groundAlt=1056133 mm x0=(0,0,0)
+  P0 diag (x1000)=(6425,10,10) Q diag (x1000)=(224332224,7239060,1511340) R diag (x1000)=(15438090,5005790,613200)
+APF state: PRE_LAUNCH -> DETECTION at t=5406ms
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 91, pad start
+LoggingService: resuming from saved flash cursor sector=336 slot=0
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 92, pad start
+LoggingService: resuming from saved flash cursor sector=336 slot=0
+PreProcess: tare done, n=27 t=5192ms (values in milli-units)
+  BARO0 valid=1 p0=89273296 mPa std=20267 mPa alt0=1055303 mm altStd=1869 mm
+  BARO1 valid=0 p0=0 mPa std=0 mPa alt0=0 mm altStd=0 mm
+  IMU0 valid=1 g=(157,-41,10044) mm/s2 gyroBias=(0,-1,1) mrad/s
+  IMU0 accStd=(14,17,21) mm/s2 gyroStd=(1,1,1) mrad/s
+  IMU1 valid=1 g=(176,-15,10004) mm/s2 gyroBias=(0,0,0) mrad/s
+  IMU1 accStd=(23,25,33) mm/s2 gyroStd=(1,1,0) mrad/s
+PreProcess: alignment CHECK MOUNTING (max pad tilt 30000 mdeg)
+  IMU0 gBody=(10044,41,157) mm/s2 tilt=89103 mdeg
+  IMU1 gBody=(10004,-176,15) mm/s2 tilt=89915 mdeg
+PreProcess: UKF init valid=1 groundAlt=1055303 mm x0=(0,0,0)
+  P0 diag (x1000)=(3494,10,10) Q diag (x1000)=(224332224,7239060,1511340) R diag (x1000)=(15438090,5005790,613200)
+APF state: PRE_LAUNCH -> DETECTION at t=5406ms
+FLIGHT: GROUND -> FLIGHT at 21274 ms (accel=1018 mg, alt=0 m)
+FlightTask - force flight ON, staying in FLIGHT until force_flight is sent again
+PollingTask - rate set to 50 ms
+APF state: DETECTION -> LAUNCH at t=21330ms
+UKF: started at alt=-189 mm vel=-95 mm/s
+ApogeeDetection: APOGEE (velocity backup) 111412 mm at t=22330ms, confirmed t=22330ms, scenarios -> post apogee
+AIRBRAKE: release (apogee detected) at t=22330ms [force_flight bench test]
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87032 B, free 222768 B
+APF: boot 93, pad start
+LoggingService: resuming from saved flash cursor sector=408 slot=0
+WHO_AM_I 108
+GPS INIT | VALSET messages sent
+
+-- CUBE SYSTEM --
+System Reset Reason: [TODO]
+Current System Free Heap: 309944 Bytes
+Lowest Ever Free Heap: 309896 Bytes
+
+PollingTask - rate set to 200 ms
+FlashTask::Run() - Starting task
+FlashTask::InitializeFlash() - Initializing MX66 flash
+FlashTask::InitializeFlash() - Status1: 0x00
+FlashTask::InitializeFlash() - MX66 ReadID: 0xc2201a
+APF: KD-trees built in 40 ms, heap used 87040 B, free 222760 B
+APF: boot 94, pad start
+LoggingService: resuming from saved flash cursor sector=408 slot=0
+PreProcess: tare done, n=27 t=5192ms (values in milli-units)
+  BARO0 valid=1 p0=89258552 mPa std=24800 mPa alt0=1056661 mm altStd=2288 mm
+  BARO1 valid=0 p0=0 mPa std=0 mPa alt0=0 mm altStd=0 mm
+  IMU0 valid=1 g=(161,-5,10123) mm/s2 gyroBias=(1,0,1) mrad/s
+  IMU0 accStd=(18,24,54) mm/s2 gyroStd=(1,1,1) mrad/s
+  IMU1 valid=1 g=(181,5,10021) mm/s2 gyroBias=(0,2,0) mrad/s
+  IMU1 accStd=(39,46,63) mm/s2 gyroStd=(1,1,1) mrad/s
+PreProcess: alignment CHECK MOUNTING (max pad tilt 30000 mdeg)
+  IMU0 gBody=(10123,5,161) mm/s2 tilt=89091 mdeg
+  IMU1 gBody=(10021,-181,-5) mm/s2 tilt=90029 mdeg
+PreProcess: UKF init valid=1 groundAlt=1056661 mm x0=(0,0,0)
+  P0 diag (x1000)=(5233,10,10) Q diag (x1000)=(224332224,7239060,1511340) R diag (x1000)=(15438090,5005790,613200)
+APF state: PRE_LAUNCH -> DETECTION at t=5406ms
+Debug, unknown command: force_fla
+Debug, unknown command: force_launch
+FLIGHT: GROUND -> FLIGHT at 21175 ms (accel=1020 mg, alt=-3 m)
+FlightTask - force flight ON, staying in FLIGHT until force_flight is sent again
+PollingTask - rate set to 50 ms
+APF state: DETECTION -> LAUNCH at t=21231ms
+UKF: started at alt=213 mm vel=92 mm/s
+ApogeeDetection: APOGEE (velocity backup) 111762 mm at t=22231ms, confirmed t=22281ms, scenarios -> post apogee
+AIRBRAKE: release (apogee detected) at t=22281ms [force_flight bench test]

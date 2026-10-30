@@ -35,6 +35,7 @@ class FlightTask: public Task
 		// Read by other tasks (SensorFrameTask: pad = GROUND before any flight, landed = GROUND after one)
 		FlightState GetFlightState() const { return flightState; }
 		bool HasFlown() const { return hasFlown; }
+		bool IsForceFlight() const { return forceFlight; }	// debug force_flight is on (bench test)
 
 	protected:
 		static void RunTask(void* pvParams) { FlightTask::Inst().Run(pvParams); } // Static Task Interface, passes control to the instance Run();
@@ -61,7 +62,7 @@ class FlightTask: public Task
 		volatile FlightState flightState = FlightState::GROUND;	// copy of stateMachine's state for other tasks
 		volatile bool hasFlown = false;							// set on the first GROUND -> FLIGHT, never cleared
 		bool testMode = false;
-		bool forceFlight = false;	// debug force_flight: stay in FLIGHT, stillness can not end it
+		volatile bool forceFlight = false;	// debug force_flight (read by the APF task): stay in FLIGHT, stillness can not end it
 		uint32_t lastTestPrintMs = 0;
 };
 
