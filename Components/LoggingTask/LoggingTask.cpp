@@ -338,7 +338,7 @@ void LoggingTask::HandleCommand(Command& cm){
 
 	if(err == LoggingStatus::LOGGING_ERR){
 		cm.Reset();
-		SOAR_PRINT("Log was unsuccessful\n");
+		SOAR_PRINT("Log was unsuccessful (reason printed above)\n");
 		return;
 	}
 	else if(err == LoggingStatus::LOG_FLASH_NOT_READY || err == LoggingStatus::LOG_FLASH_READY){

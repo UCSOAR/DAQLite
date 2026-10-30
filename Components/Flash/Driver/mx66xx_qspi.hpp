@@ -26,6 +26,7 @@ extern "C"
     void MX66xxQSPI_ReadSFDP(uint8_t *rData);
     void MX66xxQSPI_ReleaseFromDeepPowerDown(void);
     uint8_t MX66xxQSPI_ReadStatusRegister(void);
+    uint8_t MX66xxQSPI_ReadSecurityRegister(void);
     void MX66xxQSPI_WriteStatusRegister(uint8_t Data);
     void MX66xxQSPI_WriteEnable(void);
     void MX66xxQSPI_WriteDisable(void);
